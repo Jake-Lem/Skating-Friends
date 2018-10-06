@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		232BD0A4211BA21F00A49E5A /* Mewna.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232BD0A3211BA21E00A49E5A /* Mewna.swift */; };
+		2331D0FB20E9D89100B513EB /* ShopScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2331D0FA20E9D89100B513EB /* ShopScene.swift */; };
+		2331D0FD20E9D94600B513EB /* ShopScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 2331D0FC20E9D94600B513EB /* ShopScene.sks */; };
+		2331D0FF20E9EEA600B513EB /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2331D0FE20E9EEA600B513EB /* Collectible.swift */; };
 		233FDB1320CD696100C469F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB1220CD696100C469F7 /* AppDelegate.swift */; };
 		233FDB1520CD696100C469F7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 233FDB1420CD696100C469F7 /* GameScene.sks */; };
 		233FDB1720CD696100C469F7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 233FDB1620CD696100C469F7 /* Actions.sks */; };
@@ -17,6 +21,25 @@
 		233FDB2320CD696100C469F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 233FDB2120CD696100C469F7 /* LaunchScreen.storyboard */; };
 		233FDB2E20CD696100C469F7 /* Skating_FriendsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB2D20CD696100C469F7 /* Skating_FriendsTests.swift */; };
 		233FDB3920CD696100C469F7 /* Skating_FriendsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB3820CD696100C469F7 /* Skating_FriendsUITests.swift */; };
+		233FDB4720CEC54600C469F7 /* Catoko.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB4620CEC54600C469F7 /* Catoko.swift */; };
+		233FDB4920CEDE1D00C469F7 /* Skater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB4820CEDE1D00C469F7 /* Skater.swift */; };
+		233FDB4B20CEDF2300C469F7 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233FDB4A20CEDF2300C469F7 /* Move.swift */; };
+		235A12F020D1970900F3F10D /* StartScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 235A12EF20D1970900F3F10D /* StartScene.sks */; };
+		235A12F220D1971800F3F10D /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235A12F120D1971800F3F10D /* StartScene.swift */; };
+		235A12F620D1F93200F3F10D /* MeowAsada.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235A12F520D1F93200F3F10D /* MeowAsada.swift */; };
+		2376E8AC213063C7006D061D /* Achievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2376E8AB213063C7006D061D /* Achievement.swift */; };
+		2376E8AE213066C9006D061D /* AchievementSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2376E8AD213066C9006D061D /* AchievementSet.swift */; };
+		238D077620E8629A00B46AF9 /* Combo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238D077520E8629A00B46AF9 /* Combo.swift */; };
+		239F263820D4767100B4E012 /* PostGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 239F263720D4767100B4E012 /* PostGameScene.sks */; };
+		239F263A20D4768800B4E012 /* PostGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239F263920D4768800B4E012 /* PostGameScene.swift */; };
+		23A23E4A20DC3C9C0067D369 /* RecordScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A23E4920DC3C9C0067D369 /* RecordScene.swift */; };
+		23A23E4C20DC3CB40067D369 /* RecordScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 23A23E4B20DC3CB40067D369 /* RecordScene.sks */; };
+		23A23E4E20DC3EC50067D369 /* ScrollingSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A23E4D20DC3EC50067D369 /* ScrollingSprite.swift */; };
+		23B54F6920EAC31A007BB200 /* Formation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B54F6820EAC31A007BB200 /* Formation.swift */; };
+		23B9A1D620D0C1D7009B954C /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9A1D520D0C1D7009B954C /* Element.swift */; };
+		23D6CF6320D20F5A0009F76C /* CharacterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D6CF6220D20F5A0009F76C /* CharacterScene.swift */; };
+		23D6CF6520D20F6E0009F76C /* CharacterScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 23D6CF6420D20F6E0009F76C /* CharacterScene.sks */; };
+		23D6CF6720D21E840009F76C /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D6CF6620D21E840009F76C /* Button.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +60,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		232BD0A3211BA21E00A49E5A /* Mewna.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mewna.swift; sourceTree = "<group>"; };
+		2331D0FA20E9D89100B513EB /* ShopScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScene.swift; sourceTree = "<group>"; };
+		2331D0FC20E9D94600B513EB /* ShopScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ShopScene.sks; sourceTree = "<group>"; };
+		2331D0FE20E9EEA600B513EB /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
 		233FDB0F20CD696100C469F7 /* Skating Friends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Skating Friends.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		233FDB1220CD696100C469F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		233FDB1420CD696100C469F7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -53,6 +80,25 @@
 		233FDB3420CD696100C469F7 /* Skating FriendsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Skating FriendsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		233FDB3820CD696100C469F7 /* Skating_FriendsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Skating_FriendsUITests.swift; sourceTree = "<group>"; };
 		233FDB3A20CD696100C469F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		233FDB4620CEC54600C469F7 /* Catoko.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Catoko.swift; sourceTree = "<group>"; };
+		233FDB4820CEDE1D00C469F7 /* Skater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skater.swift; sourceTree = "<group>"; };
+		233FDB4A20CEDF2300C469F7 /* Move.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		235A12EF20D1970900F3F10D /* StartScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StartScene.sks; sourceTree = "<group>"; };
+		235A12F120D1971800F3F10D /* StartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
+		235A12F520D1F93200F3F10D /* MeowAsada.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeowAsada.swift; sourceTree = "<group>"; };
+		2376E8AB213063C7006D061D /* Achievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Achievement.swift; sourceTree = "<group>"; };
+		2376E8AD213066C9006D061D /* AchievementSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementSet.swift; sourceTree = "<group>"; };
+		238D077520E8629A00B46AF9 /* Combo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combo.swift; sourceTree = "<group>"; };
+		239F263720D4767100B4E012 /* PostGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PostGameScene.sks; sourceTree = "<group>"; };
+		239F263920D4768800B4E012 /* PostGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostGameScene.swift; sourceTree = "<group>"; };
+		23A23E4920DC3C9C0067D369 /* RecordScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordScene.swift; sourceTree = "<group>"; };
+		23A23E4B20DC3CB40067D369 /* RecordScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RecordScene.sks; sourceTree = "<group>"; };
+		23A23E4D20DC3EC50067D369 /* ScrollingSprite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingSprite.swift; sourceTree = "<group>"; };
+		23B54F6820EAC31A007BB200 /* Formation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formation.swift; sourceTree = "<group>"; };
+		23B9A1D520D0C1D7009B954C /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
+		23D6CF6220D20F5A0009F76C /* CharacterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterScene.swift; sourceTree = "<group>"; };
+		23D6CF6420D20F6E0009F76C /* CharacterScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CharacterScene.sks; sourceTree = "<group>"; };
+		23D6CF6620D21E840009F76C /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +151,31 @@
 			children = (
 				233FDB1220CD696100C469F7 /* AppDelegate.swift */,
 				233FDB1420CD696100C469F7 /* GameScene.sks */,
+				235A12EF20D1970900F3F10D /* StartScene.sks */,
 				233FDB1620CD696100C469F7 /* Actions.sks */,
+				2331D0FC20E9D94600B513EB /* ShopScene.sks */,
+				23D6CF6420D20F6E0009F76C /* CharacterScene.sks */,
+				239F263720D4767100B4E012 /* PostGameScene.sks */,
+				23A23E4B20DC3CB40067D369 /* RecordScene.sks */,
+				235A12F120D1971800F3F10D /* StartScene.swift */,
+				23D6CF6220D20F5A0009F76C /* CharacterScene.swift */,
 				233FDB1820CD696100C469F7 /* GameScene.swift */,
+				2376E8AB213063C7006D061D /* Achievement.swift */,
+				2376E8AD213066C9006D061D /* AchievementSet.swift */,
+				2331D0FE20E9EEA600B513EB /* Collectible.swift */,
+				23B54F6820EAC31A007BB200 /* Formation.swift */,
+				238D077520E8629A00B46AF9 /* Combo.swift */,
+				239F263920D4768800B4E012 /* PostGameScene.swift */,
+				23A23E4920DC3C9C0067D369 /* RecordScene.swift */,
+				2331D0FA20E9D89100B513EB /* ShopScene.swift */,
+				23D6CF6620D21E840009F76C /* Button.swift */,
+				23B9A1D520D0C1D7009B954C /* Element.swift */,
+				233FDB4820CEDE1D00C469F7 /* Skater.swift */,
+				232BD0A3211BA21E00A49E5A /* Mewna.swift */,
+				233FDB4620CEC54600C469F7 /* Catoko.swift */,
+				235A12F520D1F93200F3F10D /* MeowAsada.swift */,
+				23A23E4D20DC3EC50067D369 /* ScrollingSprite.swift */,
+				233FDB4A20CEDF2300C469F7 /* Move.swift */,
 				233FDB1A20CD696100C469F7 /* GameViewController.swift */,
 				233FDB1C20CD696100C469F7 /* Main.storyboard */,
 				233FDB1F20CD696100C469F7 /* Assets.xcassets */,
@@ -197,11 +266,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Jake Oscar Te Lem";
 				TargetAttributes = {
 					233FDB0E20CD696100C469F7 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = NA98G2M72M;
 						ProvisioningStyle = Automatic;
 					};
 					233FDB2820CD696100C469F7 = {
@@ -242,9 +312,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				233FDB1E20CD696100C469F7 /* Main.storyboard in Resources */,
+				23D6CF6520D20F6E0009F76C /* CharacterScene.sks in Resources */,
+				2331D0FD20E9D94600B513EB /* ShopScene.sks in Resources */,
 				233FDB1520CD696100C469F7 /* GameScene.sks in Resources */,
 				233FDB2020CD696100C469F7 /* Assets.xcassets in Resources */,
+				235A12F020D1970900F3F10D /* StartScene.sks in Resources */,
 				233FDB2320CD696100C469F7 /* LaunchScreen.storyboard in Resources */,
+				239F263820D4767100B4E012 /* PostGameScene.sks in Resources */,
+				23A23E4C20DC3CB40067D369 /* RecordScene.sks in Resources */,
 				233FDB1720CD696100C469F7 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,9 +345,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2376E8AE213066C9006D061D /* AchievementSet.swift in Sources */,
 				233FDB1920CD696100C469F7 /* GameScene.swift in Sources */,
+				233FDB4720CEC54600C469F7 /* Catoko.swift in Sources */,
+				2331D0FB20E9D89100B513EB /* ShopScene.swift in Sources */,
+				233FDB4920CEDE1D00C469F7 /* Skater.swift in Sources */,
 				233FDB1B20CD696100C469F7 /* GameViewController.swift in Sources */,
+				2331D0FF20E9EEA600B513EB /* Collectible.swift in Sources */,
+				239F263A20D4768800B4E012 /* PostGameScene.swift in Sources */,
+				233FDB4B20CEDF2300C469F7 /* Move.swift in Sources */,
+				23A23E4A20DC3C9C0067D369 /* RecordScene.swift in Sources */,
+				2376E8AC213063C7006D061D /* Achievement.swift in Sources */,
+				235A12F620D1F93200F3F10D /* MeowAsada.swift in Sources */,
+				23A23E4E20DC3EC50067D369 /* ScrollingSprite.swift in Sources */,
+				232BD0A4211BA21F00A49E5A /* Mewna.swift in Sources */,
+				238D077620E8629A00B46AF9 /* Combo.swift in Sources */,
+				23D6CF6320D20F5A0009F76C /* CharacterScene.swift in Sources */,
+				23B9A1D620D0C1D7009B954C /* Element.swift in Sources */,
 				233FDB1320CD696100C469F7 /* AppDelegate.swift in Sources */,
+				23B54F6920EAC31A007BB200 /* Formation.swift in Sources */,
+				235A12F220D1971800F3F10D /* StartScene.swift in Sources */,
+				23D6CF6720D21E840009F76C /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,15 +429,24 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -386,15 +488,24 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -424,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NA98G2M72M;
 				INFOPLIST_FILE = "Skating Friends/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jake.Skating-Friends";
@@ -436,6 +548,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NA98G2M72M;
 				INFOPLIST_FILE = "Skating Friends/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jake.Skating-Friends";
@@ -517,6 +630,7 @@
 				233FDB3F20CD696100C469F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		233FDB4020CD696100C469F7 /* Build configuration list for PBXNativeTarget "Skating FriendsTests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +639,7 @@
 				233FDB4220CD696100C469F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		233FDB4320CD696100C469F7 /* Build configuration list for PBXNativeTarget "Skating FriendsUITests" */ = {
 			isa = XCConfigurationList;
@@ -533,6 +648,7 @@
 				233FDB4520CD696100C469F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
