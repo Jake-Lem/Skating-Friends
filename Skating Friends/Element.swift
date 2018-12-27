@@ -122,9 +122,9 @@ class Element {
         case .Lutz:
             switch rotations {
             case 0:
-                calculator += 0
+                calculator += 0.5
             case 1:
-                calculator += 0.6
+                calculator += 1.4
                 
             case 2:
                 calculator += 2.1
@@ -140,12 +140,12 @@ class Element {
         case .Flip:
             switch rotations {
             case 0:
-                calculator += 0
-            case 1:
                 calculator += 0.5
+            case 1:
+                calculator += 1.3
                 
             case 2:
-                calculator += 1.8
+                calculator += 2.1
                 
             case 3:
                 calculator += 5.3
@@ -158,12 +158,12 @@ class Element {
         case .Salchow:
             switch rotations {
             case 0:
-                calculator += 0
+                calculator += 0.5
             case 1:
-                calculator += 0.4
+                calculator += 1
                 
             case 2:
-                calculator += 1.3
+                calculator += 2.0
                 
             case 3:
                 calculator += 4.2
@@ -177,12 +177,12 @@ class Element {
         case .Toe:
             switch rotations {
             case 0:
-                calculator += 0
+                calculator += 0.5
             case 1:
-                calculator += 0.4
+                calculator += 1
                 
             case 2:
-                calculator += 1.2
+                calculator += 2.0
                 
             case 3:
                 calculator += 4
@@ -195,12 +195,12 @@ class Element {
         case .Loop:
             switch rotations {
             case 0:
-                calculator += 0
-            case 1:
                 calculator += 0.5
+            case 1:
+                calculator += 1
                 
             case 2:
-                calculator += 1.8
+                calculator += 2.1
                 
             case 3:
                 calculator += 5.1
@@ -214,9 +214,9 @@ class Element {
         case .Axel:
             switch rotations {
             case 0:
-                calculator += 0
+                calculator += 1
             case 1:
-                calculator += 1.1
+                calculator += 1.9
                 
             case 2:
                 calculator += 3.3
