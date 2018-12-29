@@ -13,7 +13,10 @@ import GameplayKit
 
 class Collectible : SKSpriteNode {
    var collected = false
+   var itemSpeed = 0
+
 }
+
 
 enum Item : String {
     case Coin

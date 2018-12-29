@@ -42,9 +42,9 @@ class MeowAsada : Skater {
     var size : Double = 270
     var airTime: Double = 1.1
     var jumpHeight : Double = 190
-    var rotationSpeed: Double = 0.29
+    var rotationSpeed: Double = 0.39
 
-    var control : Double = 0.8
+    var control : Double = 0.5
 
     
     var sprite = SKSpriteNode(imageNamed: "Meow_0")

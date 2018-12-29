@@ -18,11 +18,11 @@ class Mewna : Skater {
     
     var artistry: Double = 10
     var reputation: Double = 10
-    var rotationSpeed: Double = 0.3
+    var rotationSpeed: Double = 0.4
     var size : Double = 280
     var airTime : Double = 0.9
     var jumpHeight : Double = 200
-    var control : Double = 0.9
+    var control : Double = 0.7
     var maxSpeed : Double = 2000
     var sprite = SKSpriteNode(imageNamed: "Mewna_0")
     var midair: SKAction!

@@ -54,19 +54,19 @@ class StartScene: SKScene {
     
     
     
-    func swipedRight() {
+    @objc func swipedRight() {
      
         //print("right")
 
     }
     
-    func swipedLeft() {
+    @objc func swipedLeft() {
         //print("lft")
 
         
     }
     
-    func swipedUp() {
+    @objc func swipedUp() {
     //print("up")
         let gameScene = SKScene(fileNamed: "GameScene")
         gameScene?.scaleMode = SKSceneScaleMode.aspectFill
@@ -83,7 +83,7 @@ class StartScene: SKScene {
 */
  }
     
-    func swipedDown() {
+    @objc func swipedDown() {
        // print("down")
 
     }

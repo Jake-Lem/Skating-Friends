@@ -81,7 +81,7 @@ class RecordScene: SKScene {
         fullScreen!.addChild(highScoreLabel)
 
         
-        for i in 0...8 {
+        for _ in 0...8 {
             let cat = SKSpriteNode(imageNamed: "Catoko - Skating_0")
             cat.size = CGSize(width:  270, height: 270)
             cat.zPosition = 2

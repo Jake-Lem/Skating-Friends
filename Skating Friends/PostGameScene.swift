@@ -68,8 +68,8 @@ class PostGameScene: SKScene {
         thePlayer.sprite.physicsBody?.pinned = true
         
         
-        scoresheet = userData?.value(forKey: "scoresheet") as! [Element]
-        techScore = userData?.value(forKey: "score") as! Double
+        scoresheet = userData?.value(forKey: "scoresheet") as? [Element]
+        techScore = userData?.value(forKey: "score") as? Double
         coins = userData?.value(forKey: "coins") as! Int
         
         let numCoins = defaults.integer(forKey: "Coins")

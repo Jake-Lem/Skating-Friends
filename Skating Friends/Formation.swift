@@ -58,8 +58,6 @@ class Formation {
         }
     }
     func setFormation(withForm: Int) {
-        let formWidth = Double(form.size.width)
-        let formHeight = Double(form.size.height)
         resetPhysics()
         form.removeAllActions()
         for item in itemArray {
@@ -238,7 +236,7 @@ class Formation {
             }
             
         case 7:
-            let randy = Double(10 + arc4random_uniform(40))
+            let randy = Double(arc4random_uniform(10))
             let randMoving = Double(arc4random_uniform(UInt32(itemArray.count - 1))) + 1
             var count = 0
             for item in itemArray {
@@ -309,7 +307,6 @@ class Formation {
                 form.addChild(item)
             }
         }
-        for item in itemArray {
-        }
+
     }
 }

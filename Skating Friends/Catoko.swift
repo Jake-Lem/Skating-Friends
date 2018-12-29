@@ -16,7 +16,7 @@ class Catoko : Skater {
     var spiralPower : Double = 5
     var artistry: Double = 10
     var reputation: Double = 10
-    var rotationSpeed: Double = 0.26
+    var rotationSpeed: Double = 0.3
     var size : Double = 225
     var airTime : Double = 0.9
     var jumpHeight : Double = 130

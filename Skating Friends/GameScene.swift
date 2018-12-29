@@ -40,7 +40,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var playerLevel : Int = 0
     var currentGoals : AchievementSet = AchievementSet()
-    
+    var jumpCancel = false
     var backgroundNum = 1 {
         didSet {
             updateBackground()
@@ -108,6 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var collected = false
     var inputs: [Int] = []
     
+    var heartArr : [SKSpriteNode] = []
     var thePlayer : Skater!
     
     var jumpNum = 0 {
@@ -126,8 +127,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var invincible = false
     
-    var minSpeed : Double = 500
-    var catSpeed : Double = 500 {
+    var minSpeed : Double = 750
+    var catSpeed : Double = 750 {
         didSet {
 
             
@@ -158,7 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             for item in itemArray {
-                item.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
+                item.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx + CGFloat(item.itemSpeed)
                 
             }
             
@@ -195,13 +196,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOver = false
     var lives  = 3 {
         didSet {
+            for i in 0...(3 - lives - 1) {
+                heartArr[i].alpha = 0
+            }
         if lives <= 0 {
             updateScore()
             currentGoals.save()
             currentGoals.incLevel()
             gameOver = true
             
-            //timeLeft = 0
+            //stamina = 0
             thePlayer.sprite.removeAllActions()
             
             endCollisions()
@@ -217,14 +221,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    var timeLeft : Double = 30 {
+    var stamina : Double = 60 {
         didSet {
             
-            if timeLeft > 60 {
-                timeLeft = 60
+            if stamina > 60 {
+                stamina = 60
             }
             
-            if timeLeft <= 0 {
+            if stamina <= 0 {
+                stamina = 0
+
                 /*
                 //end game
                 updateScore()
@@ -232,7 +238,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 currentGoals.incLevel()
                 gameOver = true
 
-                timeLeft = 0
+                stamina = 0
                 thePlayer.sprite.removeAllActions()
 
                 endCollisions()
@@ -245,12 +251,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 })
                 self.run(SKAction.sequence([wait, changeScene]))*/
             }
-            timerLabel.text = String(format:"Time: %.1f", timeLeft)
-            let fraction = timeLeft / 60
+            timerLabel.text = String(format:"Time: %.1f", stamina)
+            let fraction = stamina / 60
             momentumBar.run(SKAction.resize(toWidth: CGFloat(fraction * 200), duration: 0.1))
             var r : CGFloat = 0
             var g : CGFloat = 0
-            var b : CGFloat = 0
+            let b : CGFloat = 0
             let inverse = 2 * (1 - fraction)
             
             if fraction >= 0.5 {
@@ -286,6 +292,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var spiralBar = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:1), size: CGSize(width: 0, height: 10))
     
     
+    
     var scoresheet : [Element] = [] {
         didSet {
             //display the most recent element and its score on the scoreboard
@@ -305,7 +312,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var comboDone = true
     var jumpCombo : Combo!
     
-    var timeInt : Double = 0
+    var timeInt : Double = 0.3
     enum MoveQuality : String {
         case good
         case bad
@@ -360,9 +367,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var coinsLabel = SKLabelNode(fontNamed:"Helvetica")
     var scoreBackground = SKSpriteNode(color: UIColor(red:0.40, green:0.47, blue:0.64, alpha:0), size: CGSize(width: 1000, height: 250))
     var pausebox : SKSpriteNode!
-    var quitLabel = SKLabelNode(fontNamed:"Helvetica")
-    var restartLabel = SKLabelNode(fontNamed:"Helvetica")
-    var resumeLabel = SKLabelNode(fontNamed:"Helvetica")
+    var quitLabel = SKLabelNode(fontNamed:"Avenir-Book")
+    var restartLabel = SKLabelNode(fontNamed:"Avenir-Book")
+    var resumeLabel = SKLabelNode(fontNamed:"Avenir-Book")
 
     var timingBar = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:1), size: CGSize(width: 0, height: 10))
     
@@ -412,7 +419,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     pausebox.addChild(resumeLabel)
         
         for goal in currentGoals.set {
-            let goalLabel = SKLabelNode(fontNamed: "Helvetica")
+            let goalLabel = SKLabelNode(fontNamed: "Avenir-Book")
             goalLabel.text = goal.text
             goalLabel.fontSize = 45
             goalLabel.zPosition = 12
@@ -436,7 +443,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
 
     }
-    
+
     func setInvincibleEffect() {
         invincibleEffect.size = thePlayer.sprite.size
         invincibleEffect.physicsBody = SKPhysicsBody(circleOfRadius: 1)
@@ -448,6 +455,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
     func makeCombo() {
         jumpCombo = Combo(firstEl: currentElement)
+    }
+    
+    func loadHearts() {
+        for i in 0...2 {
+            let heart = SKSpriteNode(imageNamed: "heart")
+            heart.position.x = (-70 * CGFloat(i - 1)) + 100
+            heart.position.y = -40
+            heart.size = CGSize(width: 50, height: 50)
+            heartArr.append(heart)
+            momentumBar.addChild(heart)
+
+        }
     }
     
     override func didMove(to view: SKView) {
@@ -499,6 +518,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         currentElement = Element(ofType: Tech.None, bySkater: thePlayer)
         createPauseButton()
         createPauseBox()
+        loadHearts()
         makeMarker()
         
         
@@ -590,7 +610,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         for goal in currentGoals.set {
             
-            let goalLabel = SKLabelNode(fontNamed:"Helvetica")
+            let goalLabel = SKLabelNode(fontNamed:"Avenir-Book")
             goalLabel.text = goal.text
             goalLabel.fontSize = 40
             goalLabel.fontColor  = UIColor(red: 0.6, green: 0.6, blue: 0.75, alpha: 1)
@@ -647,7 +667,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         jumpHeight = thePlayer.jumpHeight
         
         //setup physics body, zPosition, etc... for sprite
-        thePlayer.sprite.zPosition = 7
+        thePlayer.sprite.zPosition = 9
         thePlayer.sprite.physicsBody!.contactTestBitMask = SkaterCategory
         thePlayer.sprite.physicsBody!.categoryBitMask = SkaterCategory
         thePlayer.sprite.physicsBody!.restitution = 0
@@ -676,14 +696,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //scoreBackground.addChild(timerLabel)
         
         momentumBar.anchorPoint = CGPoint (x: 0, y: 0.5)
-        momentumBar.size.width = CGFloat((timeLeft / 60) *  300)
+        momentumBar.size.width = CGFloat((stamina / 60) *  200)
+        momentumBar.zPosition = 7
+
         momentumBar.position = CGPoint (x: -momentumBar.size.width / 2, y: 70)
+        momentumBar.color = UIColor(red: 0, green: 1, blue: 0, alpha:1)
+
         scoreBackground.addChild(momentumBar)
         
         spiralBar.anchorPoint = CGPoint (x: 0, y: 0.5)
         spiralBar.size.width = CGFloat((spiralLevel / 100) *  300)
         spiralBar.position = CGPoint (x: -spiralBar.size.width / 2, y: 40)
-        scoreBackground.addChild(spiralBar)
+        //scoreBackground.addChild(spiralBar)
         
         //making score labels
         scoreLabel.text = "0.0"
@@ -731,7 +755,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let koi = Collectible(imageNamed: "koi0001")
         koi.size = CGSize(width: 90, height: 90)
         koi.position = CGPoint(x: 900,y:100)
-        koi.zPosition = 4
+        koi.zPosition = 5
         koi.run(SKAction.repeatForever(SKAction(named: "Koi")!))
         koi.name = "koi"
         koi.physicsBody = SKPhysicsBody(rectangleOf: koi.size)
@@ -739,12 +763,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         koi.physicsBody!.categoryBitMask = 0
         koi.physicsBody!.collisionBitMask = 0
         koi.physicsBody!.affectedByGravity = false
+        koi.itemSpeed = 200
         itemArray.append(koi)
         
         let pineapple = Collectible(imageNamed: "pineapple0001")
         pineapple.size = CGSize(width: 90, height: 90)
         pineapple.position = CGPoint(x: 900,y:100)
-        pineapple.zPosition = 4
+        pineapple.zPosition = 5
         pineapple.run(SKAction.repeatForever(SKAction(named: "Pineapple")!))
         pineapple.name = "pineapple"
         pineapple.physicsBody = SKPhysicsBody(rectangleOf: koi.size)
@@ -757,7 +782,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let butterfly = Collectible(imageNamed: "butterfly0001")
         butterfly.size = CGSize(width: 90, height: 90)
         butterfly.position = CGPoint(x: 900,y:100)
-        butterfly.zPosition = 4
+        butterfly.zPosition = 5
         butterfly.run(SKAction.repeatForever(SKAction(named: "Butterfly")!))
         butterfly.name = "butterfly"
         butterfly.physicsBody = SKPhysicsBody(rectangleOf: butterfly.size)
@@ -765,15 +790,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         butterfly.physicsBody!.categoryBitMask = 0
         butterfly.physicsBody!.collisionBitMask = 0
         butterfly.physicsBody!.affectedByGravity = false
+        butterfly.itemSpeed = 300
+
         itemArray.append(butterfly)
         
         
         for item in itemArray {
             item.zPosition = 8
         }
-        let number = arc4random_uniform(2)
         currentItem = itemArray[0]
-        currentItem.physicsBody?.velocity.dx = CGFloat(-catSpeed / speedFactor)
+        currentItem.physicsBody?.velocity.dx = CGFloat(-catSpeed / speedFactor) + CGFloat(currentItem.itemSpeed)
         screen.addChild(currentItem)
     }
     
@@ -785,8 +811,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         {[unowned self] in
             self.upTimer += 0.1
             //self.timeInt += 0.0001
-            if self.timeLeft > 0 {
-                self.timeLeft -= self.timeInt
+            if self.stamina < 60 {
+                self.stamina += self.timeInt
                 
             } else {
                 self.removeAction(forKey: "countdown")
@@ -810,7 +836,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             rink.anchorPoint = CGPoint(x: 0.5, y:0.5)
             rink.position = CGPoint(x: -500 + CGFloat(i) * rink.size.width - 5 * CGFloat(i), y: -100)
-            rink.zPosition = 2
+            rink.zPosition = 3
             rink.physicsBody = SKPhysicsBody(rectangleOf: rink.size)
             rink.physicsBody!.affectedByGravity = false
             rink.physicsBody!.allowsRotation = false
@@ -830,7 +856,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             backdrop.anchorPoint = CGPoint(x: 0.5, y:0.5)
             backdrop.position = CGPoint(x: -500 + CGFloat(i) * backdrop.size.width - 5 * CGFloat(i), y: -100)
-            backdrop.zPosition = 1
+            backdrop.zPosition = 2
             backdrop.physicsBody = SKPhysicsBody(rectangleOf: backdrop.size)
             backdrop.physicsBody!.affectedByGravity = false
             backdrop.physicsBody!.allowsRotation = false
@@ -940,7 +966,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func createTrampoline ()
     {
         trampoline.size = CGSize(width: 360, height: 360)
-        trampoline.zPosition = 3
+        trampoline.zPosition = 5
         trampoline.name = "trampoline"
         trampoline.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "trampoline0001"), size: trampoline.size)
 
@@ -949,17 +975,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         trampoline.physicsBody!.collisionBitMask = 0
         trampoline.physicsBody!.affectedByGravity = false
         trampoline.physicsBody!.velocity.dx = CGFloat(-catSpeed / speedFactor)
-screen.addChild(trampoline)
+        screen.addChild(trampoline)
 
     }
 
     
     func createCoins() {
         //create coins
-        for i in 0...15 {
+        for _ in 0...15 {
             let coin = Collectible(imageNamed: "coin0001")
             coin.size = CGSize(width: 40, height: 40)
-            coin.zPosition = 4
+            coin.zPosition = 5
             coin.run(SKAction(named: "Coin")!)
             coin.name = "coin"
             coin.physicsBody = SKPhysicsBody(rectangleOf: coin.size)
@@ -978,7 +1004,7 @@ screen.addChild(trampoline)
         let randcoin = arc4random_uniform(6)
         coinFormation.setFormation(withForm: Int(randcoin))
         coinFormation.form.position = CGPoint(x: 400, y: 0)
-        coinFormation.form.zPosition = 3
+        coinFormation.form.zPosition = 5
         coinFormation.form.size = CGSize(width: screen.size.width * 2, height: screen.size.height)
         
         coinFormation.form.physicsBody = SKPhysicsBody(rectangleOf: coinFormation.form.size)
@@ -1000,7 +1026,7 @@ screen.addChild(trampoline)
             platSprite.anchorPoint = CGPoint(x: 0.5,y: 1)
             let platform = Collectible(color: UIColor(red:CGFloat(Double(i) * 0.15), green:1, blue:1, alpha:0), size: CGSize(width: 350, height: 30))
             platform.physicsBody = SKPhysicsBody(rectangleOf: platform.size)
-            platform.zPosition = 3
+            platform.zPosition = 4
             //platform.physicsBody!.pinned = true
             
             
@@ -1026,7 +1052,7 @@ screen.addChild(trampoline)
         let randPlat2 = 4 + arc4random_uniform(3)
         theFormation.setFormation(withForm: Int(randPlat2))
         theFormation.form.position = pos
-        theFormation.form.zPosition = 3
+        theFormation.form.zPosition = 1
         theFormation.form.size = CGSize(width: screen.size.width * 2, height: screen.size.height)
         theFormation.form.name = name
         
@@ -1187,14 +1213,15 @@ screen.addChild(trampoline)
     }
     
     func beginJump(withType: Tech, withTakeoff: Move) {
-        let theVy = calcVY(forHeight: jumpHeight)
+
+        let theVy = calcVY(forHeight: jumpHeight * max(0.4, (stamina / 60)))
         currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
         jumpCombo = Combo(firstEl: currentElement)
         jump(with: withTakeoff, vy: theVy)
     }
     
     func beginComboJump(withType: Tech) {
-        let theVy = calcVY(forHeight: jumpHeight / (pow(1.3, Double(jumpCombo.combo.count))))
+        let theVy = calcVY(forHeight: jumpHeight / (pow(1.3, Double(jumpCombo.combo.count))) * (stamina / 60))
             thePlayer.sprite.removeAction(forKey: "land")
             currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
             jumpCombo.addMove(withEl: currentElement)
@@ -1202,19 +1229,33 @@ screen.addChild(trampoline)
         
     }
     
+    func beginComboJump(withType: Tech, withVy: CGFloat) {
+        thePlayer.sprite.removeAction(forKey: "land")
+        currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
+        jumpCombo.addMove(withEl: currentElement)
+        jump(with: Move.toeTakeoff, vy: withVy)
+        
+    }
+    
     
     func landJump() {
         thePlayer.sprite.removeAction(forKey: "jump")
 
-        if held {
-            self.currentElement.addFall()
-        }
+//        if held {
+//            self.currentElement.addFall()
+//        }
         
+        
+        if(Double((arc4random_uniform(101))) / 100 > thePlayer.control + stamina / 60) {
+            self.currentElement.addFall()
+
+        }
         let land = SKAction.run {
             [unowned self] in
             self.thePlayer.sprite.physicsBody?.velocity.dy = 0
 
             self.currentMotion = Motion.Landing
+
             self.goodMove = MoveQuality.notBegun
             self.timingBar.color = UIColor (red:1.0, green:1.0, blue:1.0, alpha:1.0)
             
@@ -1234,11 +1275,16 @@ screen.addChild(trampoline)
         }
         
         let waitLand = SKAction.wait(forDuration: thePlayer.landing.duration / 2)
-        
+        self.jumpCancel = false
+
         let finish = SKAction.run {
             [unowned self] in
             //finish jump combo
             self.comboDone = true
+            
+            self.thePlayer.sprite.removeAction(forKey:  "timeAction")
+            self.actionTimer = 0
+            self.invincible = false
             if self.jumpCombo == nil {
                 self.currentMotion = Motion.Skating
                 return
@@ -1261,10 +1307,6 @@ screen.addChild(trampoline)
     func jump(with: Move, vy: CGFloat) {
         comboDone = false
         
-        let turnOff = SKAction.run {
-            [unowned self] in
-            self.allOff = true
-        }
         
         let backOn = SKAction.run {
             [unowned self] in
@@ -1291,6 +1333,17 @@ screen.addChild(trampoline)
             self.currentMotion = Motion.Midair
 
             self.thePlayer.sprite.physicsBody!.velocity.dy = vy
+            
+            
+            //adds time to the actionTimer variable
+            let addAction = SKAction.run {
+                [unowned self] in
+                self.actionTimer += 0.1
+            }
+            
+            let timeAction = SKAction.sequence([SKAction.wait(forDuration: 0.1), addAction])
+            self.thePlayer.sprite.run(SKAction.repeatForever(timeAction), withKey: "timeAction")
+            
             //self.thePlayer.sprite.run(SKAction.sequence([SKAction.wait(forDuration: 0.1),setMidair]))
 
             }
@@ -1337,8 +1390,27 @@ screen.addChild(trampoline)
     }
     
     func rotateJump() {
-        
-        if held {
+//        let postRotate = SKAction.run {
+//            [unowned self] in
+//            self.thePlayer.sprite.physicsBody!.velocity.dy += 100
+//            if self.currentElement.rotations < 4 {
+//                self.currentElement.addRotation()
+//                let turnOn = SKAction.fadeAlpha(to: 1, duration: 0)
+//                let turnOff = SKAction.fadeAlpha(to: 0, duration: 0)
+//                let success = SKAction(named: "Success", duration: 0.2)!
+//                let successSeq = SKAction.sequence([turnOn, success, turnOff])
+//                self.effect.run(successSeq, withKey: "rotate")
+//            }
+//
+//        }
+//
+//        if goodMove == MoveQuality.bad {
+//            currentElement.addFall()
+//        }
+//
+//        let waitRotate = SKAction.sequence([thePlayer.rotate, postRotate])
+//        thePlayer.sprite.run(SKAction.sequence([ thePlayer.jumpTrans.reversed(), SKAction.repeat(waitRotate, count: 4 - currentElement.rotations)]), withKey: "rotate")
+        if !held && !jumpCancel {
 
             let postRotate = SKAction.run {
                 [unowned self] in
@@ -1353,24 +1425,26 @@ screen.addChild(trampoline)
                 }
 
             }
-            
-            if goodMove == MoveQuality.bad {
-                currentElement.addFall()
-            }
-            
+
+//            if goodMove == MoveQuality.bad {
+//                currentElement.addFall()
+//            }
+
             let waitRotate = SKAction.sequence([thePlayer.rotate, postRotate])
             thePlayer.sprite.run(SKAction.sequence([ thePlayer.jumpTrans.reversed(), SKAction.repeat(waitRotate, count: 4 - currentElement.rotations)]), withKey: "rotate")
-            
+
         } else {
+            jumpCancel = true
+
             if thePlayer.sprite.action(forKey: "rotate") == nil {
                 return
             }
-            
+
             thePlayer.sprite.removeAction(forKey: "rotate")
             effect.removeAction(forKey: "rotate")
 
             thePlayer.sprite.run(thePlayer.jumpTrans)
-            
+
         }
     }
     
@@ -1419,14 +1493,15 @@ screen.addChild(trampoline)
         
         let addSpeed = SKAction.run {
             [unowned self] in
-            let speed = self.spiralLevel * 5 * self.thePlayer.spiralPower
+            let speed = self.stamina * 5 * self.thePlayer.spiralPower
             self.speedChange = self.catSpeed
         self.catSpeed += speed
         }
         let removeTime = SKAction.run {
             [unowned self] in
             self.spiralLevel -= 0.1 * 100 / self.thePlayer.spiralPower
-            if self.spiralLevel <= 0 {
+            self.stamina -= 10 / self.thePlayer.spiralPower
+            if self.stamina <= 0 {
                 
                 self.thePlayer.sprite.run(finishGroup)
             }
@@ -1539,27 +1614,28 @@ screen.addChild(trampoline)
         case .Loop, .Axel, .Flip, .Lutz, .Toe, .Salchow, .JumpCombo :
             spiralLevel += currentElement.score
             if currentElement.fall {
-                //timeLeft -= max(20,timeInt * 40)
+                stamina -= 21
                 lives -= 1
                 
             } else {
-                timeLeft += currentElement.score
+                stamina -= currentElement.score / 1.35
                 
             }
             
         case .Layback :
             //print((actionTimer * 3) / staleCount)
             spiralLevel += currentElement.score
-            timeLeft += max((actionTimer * timeInt) * thePlayer.spinPower / staleCount,(actionTimer * thePlayer.spinPower) / staleCount)
+            stamina -= actionTimer * timeInt
             
             print(staleCount)
         case .Spiral :
-            timeLeft += currentElement.score
+            //stamina += currentElement.score
+            break
         default:
             break
         }
-        if timeLeft > 60 {
-            timeLeft = 60
+        if stamina > 60 {
+            stamina = 60
         }
     }
     
@@ -1660,12 +1736,12 @@ screen.addChild(trampoline)
         
         
         if imageName == "background7" {
-            backgroundTrans?.zPosition = 3
+            backgroundTrans?.zPosition = 4
         }
         switch backgroundNum {
 
         case 1:
-            backgroundTrans?.zPosition = 3
+            backgroundTrans?.zPosition = 4
             imageName = "background7"
             foregroundName = "foregroundtrans"
             foreground2Name = "foregroundtrans"
@@ -1760,7 +1836,7 @@ screen.addChild(trampoline)
         }
     }
     
-    func updatePlatforms(platArr: inout [SKSpriteNode], platForm: Formation) {
+    func updatePlatforms(platForm: Formation) {
         var allGone = true
         var count = 0
         platForm.form.physicsBody?.velocity.dx =  coinFormation.form.physicsBody!.velocity.dx
@@ -1768,8 +1844,9 @@ screen.addChild(trampoline)
         marker.position.x = 0
         marker.position.y = thePlayer.sprite.position.y - thePlayer.sprite.size.height / CGFloat(thePlayer.footDiv)
         screen.addChild(marker)
+        let platArr = platForm.itemArray
         
-        for platform in platArr {
+        for platform in platArr! {
             platform.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
             let platformPos = platForm.form.convert(platform.position, to: screen)
             let playerPos = thePlayer.sprite.position
@@ -1810,7 +1887,6 @@ screen.addChild(trampoline)
             platForm.form.removeFromParent()
             platForm.form.position.x = 900
             let number = 4 + arc4random_uniform(3)
-            
             platForm.setFormation(withForm: Int(number))
             screen.addChild(platForm.form)
             
@@ -1828,7 +1904,7 @@ screen.addChild(trampoline)
         }
         for item in itemArray {
             
-            item.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
+            item.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx + CGFloat(item.itemSpeed)
 
             if item.collected && item.parent == nil {
                 item.collected = false
@@ -1894,16 +1970,13 @@ screen.addChild(trampoline)
     }
     
     func updateScore() {
-        if currentElement == nil {
-            return
-        }
         currentElement.calcScore()
         score += currentElement.score
         if currentElement.type != Tech.None {
             scoresheet.append(currentElement)
         }
      /*
-        if timeLeft > 0 {
+        if stamina > 0 {
         updateMomentum()
         }*/
         
@@ -1970,7 +2043,6 @@ screen.addChild(trampoline)
     
     func moveItemAbovePlatform(plat: Collectible, toMove: SKSpriteNode) {
         var platformPos : CGPoint
-        var itemPos = toMove.convert(toMove.position, to: screen)
         platformPos = (plat.parent?.convert(plat.position, to: screen))!
 
         
@@ -1985,8 +2057,15 @@ screen.addChild(trampoline)
     
     func makeFall() {
         cancelAllMoves()
-        
+        stamina -= 21
+        let temp = self.catSpeed
         self.catSpeed = minSpeed
+        let increaseSpeed = SKAction.run {
+            self.catSpeed += (temp - self.catSpeed) / 6
+
+        }
+        
+        let accelerate = SKAction.repeat(SKAction.sequence([increaseSpeed, SKAction.wait(forDuration: 0.5)]), count: 6)
         self.thePlayer.sprite.physicsBody?.affectedByGravity = true
         self.currentMotion = Motion.Skating
         let makeInvincible = SKAction.run {
@@ -1997,11 +2076,16 @@ screen.addChild(trampoline)
         }
         
         let fallSafe = SKAction.sequence([makeInvincible, SKAction.wait(forDuration: 0.5), makeNotInvincible])
+        
+        self.thePlayer.sprite.removeAction(forKey:  "timeAction")
+        self.actionTimer = 0
+
+
         let postFall = SKAction.run{
             [unowned self] in
             
-            self.thePlayer.sprite.run(fallSafe)
-            //self.timeLeft -= max(20,self.timeInt * 40)
+            self.thePlayer.sprite.run(SKAction.group([accelerate,fallSafe]))
+            //self.stamina -= max(20,self.timeInt * 40)
             self.lives -= 1
             self.currentMotion = Motion.Skating
             self.thePlayer.sprite.physicsBody?.affectedByGravity = true
@@ -2320,11 +2404,13 @@ screen.addChild(trampoline)
         self.currentMotion = Motion.Skating
         
         burstItem(item: koi)
+        invincible = true
+
         catSpeed += 200
         if currentElement.type == Tech.None {
             beginJump(withType: .Loop, withTakeoff: .loopTakeoff)
         } else {
-            beginComboJump(withType: .Loop)
+            beginComboJump(withType: .Loop, withVy: calcVY(forHeight: jumpHeight))
             
         }
         numKois += 1
@@ -2333,7 +2419,7 @@ screen.addChild(trampoline)
     
     func consumePineapple(pineapple: Collectible) {
         burstItem(item: pineapple)
-        timeLeft += 60
+        stamina += 60
         numPineapples += 1
         pineapple.collected = true
     }
@@ -2382,9 +2468,15 @@ screen.addChild(trampoline)
         }
     }
     
+    func updateInvincible() {
+        if(actionTimer > 0.8 && currentMotion == Motion.Midair) {
+            invincible = true
+        }
+    }
+    
 
     
-    func swipedRight() {
+    @objc func swipedRight() {
         if(!gamePaused) {
             
             addInput(withInt: 2)
@@ -2396,7 +2488,7 @@ screen.addChild(trampoline)
         }
     }
     
-    func swipedLeft() {
+    @objc func swipedLeft() {
         if(!gamePaused) {
             
             addInput(withInt: 1)
@@ -2404,7 +2496,7 @@ screen.addChild(trampoline)
         }
     }
     
-    func swipedUp() {
+    @objc func swipedUp() {
         if(!gamePaused) {
             
             addInput(withInt: 3)
@@ -2412,7 +2504,7 @@ screen.addChild(trampoline)
         }
     }
     
-    func swipedDown() {
+    @objc func swipedDown() {
         if(!gamePaused) {
             addInput(withInt: 4)
             decodeAction()
@@ -2542,17 +2634,13 @@ screen.addChild(trampoline)
         updateBanana()
         updateTrampoline()
         updateEffects()
+        updateInvincible()
         
         for formation in platFormationArray {
-            updatePlatforms(platArr: &(formation.itemArray!), platForm: formation)
+            updatePlatforms(platForm: formation)
 
         }
         updateGoalText ()
-        if currentElement == nil {
-            print("nil")
-        } else {
-        print(currentElement.type)
-        }
         for el in currentGoals.set {
             el.updateTotal(bananas: bananaSmash, kois: numKois, butterflies: numButterflies, pineapples: numPineapples, coins: coins)
             

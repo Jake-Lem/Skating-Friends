@@ -26,26 +26,25 @@ class CharacterScene: SKScene {
     var mewnaButton : Button?
 
     var toolbar : SKSpriteNode?
-    var backLabel = SKLabelNode(fontNamed:"Helvetica")
-    var chooseLabel = SKLabelNode(fontNamed:"Helvetica")
+    var backLabel = SKLabelNode(fontNamed:"Avenir-Black")
+    var chooseLabel = SKLabelNode(fontNamed:"Avenir-Black")
 
     var highScoreLabel = SKLabelNode(fontNamed:"Helvetica")
-    var statsSprite = SKSpriteNode(color: UIColor(red:0.40, green:0.47, blue:0.64, alpha:0.95), size: CGSize(width: 350, height: 250))
-    var artLabel = SKLabelNode(fontNamed:"Helvetica")
-    var repLabel = SKLabelNode(fontNamed:"Helvetica")
-    var heightLabel = SKLabelNode(fontNamed:"Helvetica")
-    var controlLabel = SKLabelNode(fontNamed:"Helvetica")
-    var skaterName = SKLabelNode(fontNamed:"Helvetica")
+    var statsSprite = SKSpriteNode(color: UIColor(red:0.40, green:0.47, blue:0.64, alpha:0), size: CGSize(width: 350, height: 250))
+    var artLabel = SKLabelNode(fontNamed:"Avenir-Black")
+    var repLabel = SKLabelNode(fontNamed:"Avenir-Black")
+    var heightLabel = SKLabelNode(fontNamed:"Avenir-Black")
+    var controlLabel = SKLabelNode(fontNamed:"Avenir-Black")
+    var skaterName = SKLabelNode(fontNamed:"Avenir-Black")
 
     
-    var goLabel = SKLabelNode(text: "GO!")
+    var goLabel = SKLabelNode(fontNamed:"Avenir-Black")
 
     var goSprite = SKSpriteNode(color: UIColor(red:1.0, green:0.47, blue:0.64, alpha:0.95), size: CGSize(width: 200, height: 40))
 
     
     override func didMove(to view: SKView) {
-        
-        toolbar = SKSpriteNode(color: UIColor(red:0.40, green:0.47, blue:0.64, alpha:0.95),size: CGSize(width: self.size.width, height: 120))
+        toolbar = SKSpriteNode(color: UIColor(red:0.73, green:0.9, blue:1.0, alpha:0.95),size: CGSize(width: self.size.width, height: 120))
         toolbar?.position = CGPoint (x: 0, y: self.frame.maxY - (toolbar?.size.height)!/2)
         self.addChild(toolbar!)
         
@@ -55,10 +54,20 @@ class CharacterScene: SKScene {
         toolbar?.addChild(backLabel)
         
         
-        chooseLabel.text = "Choose Your Character"
+        chooseLabel.text = "CHOOSE YOUR CHARACTER"
         chooseLabel.fontSize = 50
         chooseLabel.position = CGPoint(x: 0, y: -10)
         toolbar?.addChild(chooseLabel)
+        
+        
+        let sky = SKSpriteNode(imageNamed: "sky1")
+        
+        sky.name = "Sky"
+        sky.size = CGSize (width: 1400, height: 1500)
+        sky.anchorPoint = CGPoint(x: 0.5, y:0.5)
+        sky.position = CGPoint(x: 0, y: 0)
+        sky.zPosition = -1
+        addChild(sky)
 
         //catoko.setSize(withSize: 300)
         //meow.setSize(withSize: 400)
@@ -122,8 +131,8 @@ class CharacterScene: SKScene {
         goSprite.position = CGPoint(x: 0, y: -90)
         goSprite.name = "Go Sprite"
         goLabel.position = CGPoint(x: 0, y: -(goLabel.fontSize / 2))
-        goLabel.fontName = "Helvetica"
-        
+        goLabel.text = "GO!"
+
        
 
         swipeRightRec.addTarget(self, action: #selector(CharacterScene.swipedRight))
@@ -158,19 +167,19 @@ class CharacterScene: SKScene {
     
     
     
-    func swipedRight() {
+    @objc func swipedRight() {
         
     }
     
-    func swipedLeft() {
+    @objc func swipedLeft() {
 
         
     }
     
-    func swipedUp() {
+    @objc func swipedUp() {
     }
     
-    func swipedDown() {
+    @objc func swipedDown() {
  
     }
     
