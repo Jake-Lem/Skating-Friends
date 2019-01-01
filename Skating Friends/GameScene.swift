@@ -25,7 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var cam : SKCameraNode?
     //stops the camera from snapping to player if player snaps in game
     var stopJerk = false
-
+    
     var changeScene = false
     var rink = SKSpriteNode()
     var pauseButton = SKSpriteNode()
@@ -34,17 +34,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var marker : SKSpriteNode!
     var jumpHeight : Double = 0
     var imageName : String?
-
+    
     var foregroundName : String?
     var foreground2Name : String?
-
+    
+    var backgroundDict : [Int : [String]] = [:]
+    
+    
     var playerLevel : Int = 0
     var currentGoals : AchievementSet = AchievementSet()
     var jumpCancel = false
-    var backgroundNum = 1 {
+    var backgroundNum = 3 {
         didSet {
-            updateBackground()
-
+            //updateBackground()
+            
             didChange = true
         }
     }
@@ -54,9 +57,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var saveCount = 2 {
         didSet{
-        if saveCount > 4 {
-            saveCount = 1
-        }
+            if saveCount > 4 {
+                saveCount = 1
+            }
         }
     }
     
@@ -67,13 +70,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             coinsLabel.text = String(coins)
         }
     }
-
+    
     var numKois = 0
     var numButterflies = 0
     var numPineapples = 0
     var bananaSmash = 0
     
-
+    
     
     var score : Double = 0 {
         didSet {
@@ -90,15 +93,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var bananaArray : [Collectible] = []
     var trampoline = Collectible(imageNamed: "trampoline0001")
-    /*
-    var platformArray : [SKSpriteNode] = []
-    var platformArray2 : [SKSpriteNode] = []
-    var platformArray3 : [SKSpriteNode] = []
-
-    var platFormation : Formation!
-    var platFormation2 : Formation!
-    var platFormation3 : Formation!*/
-
     
     var platFormationArray : [Formation] = []
     //if all platforms should not make contact with player
@@ -123,18 +117,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     lazy var backgroundPieces2 : [SKSpriteNode] = [SKSpriteNode(imageNamed: "foreground1"), SKSpriteNode(imageNamed: "foreground1"), SKSpriteNode(imageNamed: "foreground1")]
     
-        lazy var backgroundPieces3 : [SKSpriteNode] = [SKSpriteNode(imageNamed: "foreground3"), SKSpriteNode(imageNamed: "foreground3"), SKSpriteNode(imageNamed: "foreground3")]
+    lazy var backgroundPieces3 : [SKSpriteNode] = [SKSpriteNode(imageNamed: "foreground3"), SKSpriteNode(imageNamed: "foreground3"), SKSpriteNode(imageNamed: "foreground3")]
     
     var invincible = false
     
     var minSpeed : Double = 750
     var catSpeed : Double = 750 {
         didSet {
-
+            
             
             for background in backgroundPieces {
                 // Minus, because the background is moving from left to right.
-                background.physicsBody!.velocity.dx = CGFloat(-catSpeed / 8)
+                background.physicsBody!.velocity.dx = 0//CGFloat(-catSpeed / 8)
             }
             
             goalBackground.physicsBody!.velocity.dx = CGFloat(-catSpeed / 8)
@@ -167,17 +161,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 for platform in formation.itemArray {
                     platform.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
                 }
-                    formation.form.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
+                formation.form.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
             }
-        
             
-
-
+            
             for banana in bananaArray {
-            banana.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
+                banana.physicsBody!.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
             }
-
-
+            
+            
         }
     }
     
@@ -194,30 +186,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var holdTime : Double = 0
     var actionTimer : Double = 0
     var gameOver = false
-    var lives  = 3 {
+    var lives = 1 {
         didSet {
-            for i in 0...(3 - lives - 1) {
-                heartArr[i].alpha = 0
-            }
-        if lives <= 0 {
-            updateScore()
-            currentGoals.save()
-            currentGoals.incLevel()
-            gameOver = true
             
-            //stamina = 0
-            thePlayer.sprite.removeAllActions()
-            
-            endCollisions()
-            self.currentMotion = Motion.Stationary
-            thePlayer.sprite.run(self.thePlayer.bow)
-            
-            let wait = SKAction.wait(forDuration: 3)
-            let changeScene = SKAction.run({
-                [unowned self] in self.changeScene = true
-            })
-            self.run(SKAction.sequence([wait, changeScene]))
-            
+            if lives <= 0 {
+                updateScore()
+                
+                gameOver = true
+                
+                currentGoals.save()
+                
+                if(currentGoals.incLevel()) {
+                    displayNewGoals()
+                } else {
+                    displayGoals()
+                }
+                
+                //stamina = 0
+                thePlayer.sprite.removeAllActions()
+                
+                endCollisions()
+                self.currentMotion = Motion.Stationary
+                thePlayer.sprite.run(self.thePlayer.bow)
+                
+                let wait = SKAction.wait(forDuration: 3)
+                let changeScene = SKAction.run({
+                    [unowned self] in self.changeScene = true
+                })
+                self.run(SKAction.sequence([wait, changeScene]))
+                
+            } else {
+                for i in 0...(3 - lives - 1) {
+                    heartArr[i].alpha = 0
+                }
             }
         }
     }
@@ -230,26 +231,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if stamina <= 0 {
                 stamina = 0
-
-                /*
-                //end game
-                updateScore()
-                currentGoals.save()
-                currentGoals.incLevel()
-                gameOver = true
-
-                stamina = 0
-                thePlayer.sprite.removeAllActions()
-
-                endCollisions()
-                self.currentMotion = Motion.Stationary
-                thePlayer.sprite.run(self.thePlayer.bow)
-                
-                let wait = SKAction.wait(forDuration: 3)
-                let changeScene = SKAction.run({
-                    [unowned self] in self.changeScene = true
-                })
-                self.run(SKAction.sequence([wait, changeScene]))*/
             }
             timerLabel.text = String(format:"Time: %.1f", stamina)
             let fraction = stamina / 60
@@ -285,7 +266,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let fraction = spiralLevel / 100
             spiralBar.run(SKAction.resize(toWidth: CGFloat(fraction * 200), duration: 0.1))
-
+            
         }
     }
     
@@ -303,9 +284,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     lastElScoreLabel.text = String(format:"%.1f", (lastEl.score))
                 }
             }
-            currentGoals.set[0].updateTotal(fromScoresheet: scoresheet)
-            currentGoals.set[1].updateTotal(fromScoresheet: scoresheet)
-            currentGoals.set[2].updateTotal(fromScoresheet: scoresheet)
+            
+            for theGoal in currentGoals.set {
+                theGoal.updateTotal(fromScoresheet: scoresheet, game: self)
+            }
         }
     }
     var comboCount = 1
@@ -354,7 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             case Motion.Skating:
                 cancelAllMoves()
                 removeAction(forKey: "reduceSpeed")
-
+                
             default:
                 removeAction(forKey: "reduceSpeed")
             }
@@ -370,7 +352,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var quitLabel = SKLabelNode(fontNamed:"Avenir-Book")
     var restartLabel = SKLabelNode(fontNamed:"Avenir-Book")
     var resumeLabel = SKLabelNode(fontNamed:"Avenir-Book")
-
+    
     var timingBar = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:1), size: CGSize(width: 0, height: 10))
     
     var momentumBar = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:1), size: CGSize(width: 0, height: 20))
@@ -379,44 +361,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var initGoalLabelArray : [SKLabelNode] = []
     var pauseGoalLabelArray : [SKLabelNode] = []
-
-
+    
+    
     let SkaterCategory  : UInt32 = 0x1 << 1
     //let SkaterCategory  : UInt32 = 0x1 << 1
-
+    
     func createPauseBox() {
-    //setup pausebox position
-       pausebox = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:0.8), size: CGSize(width: size.width, height: size.height))
-
-    pausebox.position = CGPoint(x: 0, y: 0)
-    pausebox.zPosition = 12
-    
-    //setup restart and quit labels
-    restartLabel.text = "Restart"
-    restartLabel.fontColor = SKColor.black
-    restartLabel.fontSize = 60
-    restartLabel.zPosition = 12
-    restartLabel.position = CGPoint(x: -200, y: -200)
-    
-    
-    quitLabel.text = "Quit"
-    quitLabel.fontColor = SKColor.black
-    quitLabel.fontSize = 60
-    quitLabel.zPosition = 12
-    quitLabel.position = CGPoint(x: 0, y: -200)
-    
-    
-    resumeLabel.text = "Resume"
-    resumeLabel.fontColor = SKColor.black
-    resumeLabel.fontSize = 60
-    resumeLabel.zPosition = 12
-    resumeLabel.position = CGPoint(x: 200, y: -200)
-    
-    
-    //add restart and quit labels to pausebox
-    pausebox.addChild(restartLabel)
-    pausebox.addChild(quitLabel)
-    pausebox.addChild(resumeLabel)
+        //setup pausebox position
+        pausebox = SKSpriteNode (color: UIColor(red:1, green:1, blue:1, alpha:0.8), size: CGSize(width: size.width, height: size.height))
+        
+        pausebox.position = CGPoint(x: 0, y: 0)
+        pausebox.zPosition = 12
+        
+        //setup restart and quit labels
+        restartLabel.text = "Restart"
+        restartLabel.fontColor = SKColor.black
+        restartLabel.fontSize = 60
+        restartLabel.zPosition = 12
+        restartLabel.position = CGPoint(x: -200, y: -200)
+        
+        
+        quitLabel.text = "Quit"
+        quitLabel.fontColor = SKColor.black
+        quitLabel.fontSize = 60
+        quitLabel.zPosition = 12
+        quitLabel.position = CGPoint(x: 0, y: -200)
+        
+        
+        resumeLabel.text = "Resume"
+        resumeLabel.fontColor = SKColor.black
+        resumeLabel.fontSize = 60
+        resumeLabel.zPosition = 12
+        resumeLabel.position = CGPoint(x: 200, y: -200)
+        
+        
+        //add restart and quit labels to pausebox
+        pausebox.addChild(restartLabel)
+        pausebox.addChild(quitLabel)
+        pausebox.addChild(resumeLabel)
         
         for goal in currentGoals.set {
             let goalLabel = SKLabelNode(fontNamed: "Avenir-Book")
@@ -429,9 +411,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         var count = 0
         for label in pauseGoalLabelArray {
-            let strikethrough = SKSpriteNode(color: UIColor(red: 1, green: 1, blue: 1, alpha: 0), size: CGSize(width: label.frame.width, height: 10))
+            //all labels have a strikethrough but with 0 alpha
+            let strikethrough = SKSpriteNode(color: UIColor(red: 1, green: 1, blue: 1, alpha: 0), size: CGSize(width: label.frame.width, height: 5))
             strikethrough.name = "strikethrough"
-            strikethrough.position = CGPoint(x: 0, y: label.frame.height / 2)
+            strikethrough.position = CGPoint(x: 0, y: label.frame.height / 2 - 10)
             //strikethrough.zPosition =
             label.position = CGPoint(x: 0, y: 100 - 100 * count)
             label.addChild(strikethrough)
@@ -439,11 +422,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             count += 1
         }
         
+        let levelLabel = SKLabelNode(fontNamed: "Avenir-Book")
         
+        let PlayerLevel = defaults.integer(forKey: "PlayerLevel")
 
+        levelLabel.text = String(PlayerLevel)
+        levelLabel.fontSize = 110
+        levelLabel.zPosition = 12
+        levelLabel.fontColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+        levelLabel.position = CGPoint(x: 0, y: 190)
+        
+        pausebox.addChild(levelLabel)
 
+        
+        
+        
+        
     }
-
+    
     func setInvincibleEffect() {
         invincibleEffect.size = thePlayer.sprite.size
         invincibleEffect.physicsBody = SKPhysicsBody(circleOfRadius: 1)
@@ -452,7 +448,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         invincibleEffect.run(SKAction(named: "stars")!)
         
     }
-   
+    
     func makeCombo() {
         jumpCombo = Combo(firstEl: currentElement)
     }
@@ -465,12 +461,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             heart.size = CGSize(width: 50, height: 50)
             heartArr.append(heart)
             momentumBar.addChild(heart)
-
+            
         }
     }
     
-    override func didMove(to view: SKView) {
+    func loadBackgroundNames() {
+        backgroundDict[1] = ["background7", "foregroundtrans", "foregroundtrans"]
+        backgroundDict[2] = ["sky1", "foreground1", "foreground3"]
+        backgroundDict[3] = ["background10", "foreground1", "foreground3"]
+        backgroundDict[4] = ["background11", "foreground1", "foreground3"]
 
+    }
+    
+    override func didMove(to view: SKView) {
+        
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.speed = 3.0
         //adding swipe gesture recognizers
@@ -496,8 +500,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         swipeUpRec.cancelsTouchesInView = false
         
         view.addGestureRecognizer(swipeUpRec)
-        
-        
+        loadBackgroundNames()
         setScreen()
         setFixed()
         setPlayer()
@@ -506,10 +509,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setGoals ()
         makeGoalLabels()
         drawBackground()
+        currentGoals.setGameScene(theScene: self)
+
         //createBanana()
         startBananaSeq()
         createTrampoline ()
         createBackgroundTransition()
+        setInitBackground()
+
         createCoins()
         setPlatforms(position: CGPoint(x: 200, y: 0))
         createItems()
@@ -522,10 +529,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         makeMarker()
         
         
-
-
+        
+        
     }
     func startBananaSeq() {
+        //FIXHERE
         let wait = SKAction.wait(forDuration: 15)
         let placeBanana = SKAction.run {
             [unowned self] in
@@ -607,7 +615,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func makeGoalLabels() {
         goalBackground.position = CGPoint(x: 0, y: 0)
         goalBackground.zPosition = 1
-
+        
         for goal in currentGoals.set {
             
             let goalLabel = SKLabelNode(fontNamed:"Avenir-Book")
@@ -623,10 +631,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var i = 0
         
         for label in initGoalLabelArray {
-            let strikethrough = SKSpriteNode(color: UIColor(red: 1, green: 1, blue: 1, alpha: 0), size: CGSize(width: label.frame.width, height: 10))
+            let strikethrough = SKSpriteNode(color: UIColor(red: 1, green: 1, blue: 1, alpha: 0), size: CGSize(width: label.frame.width, height: 5))
             
             strikethrough.name = "strikethrough"
-            strikethrough.position = CGPoint(x: 0, y: label.frame.height / 2)
+            strikethrough.position = CGPoint(x: 0, y: label.frame.height / 2 - 10)
             //strikethrough.zPosition = 13
             label.addChild(strikethrough)
             label.position = CGPoint(x: 0, y: 250 - 100 * i)
@@ -679,8 +687,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         thePlayer.sprite.constraints = [lockPlayer]
         //add sprite to screen
         screen.addChild(thePlayer.sprite)
-
+        
     }
+    
     
     func createScoreBox() {
         scoreBackground.position = CGPoint(x: 0, y: self.frame.maxY - 150)
@@ -698,10 +707,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         momentumBar.anchorPoint = CGPoint (x: 0, y: 0.5)
         momentumBar.size.width = CGFloat((stamina / 60) *  200)
         momentumBar.zPosition = 7
-
+        
         momentumBar.position = CGPoint (x: -momentumBar.size.width / 2, y: 70)
         momentumBar.color = UIColor(red: 0, green: 1, blue: 0, alpha:1)
-
+        
         scoreBackground.addChild(momentumBar)
         
         spiralBar.anchorPoint = CGPoint (x: 0, y: 0.5)
@@ -791,7 +800,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         butterfly.physicsBody!.collisionBitMask = 0
         butterfly.physicsBody!.affectedByGravity = false
         butterfly.itemSpeed = 300
-
+        
         itemArray.append(butterfly)
         
         
@@ -827,6 +836,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func drawBackground () {
         //draw background
         
+        let sky = backgroundPieces[0]
+        
+        sky.name = "Rink"
+        sky.size = CGSize (width: 1400, height: 900)
+        sky.anchorPoint = CGPoint(x: 0.5, y:0.5)
+//        sky.position = CGPoint(x: -500 + CGFloat(i) * sky.size.width - 20 * CGFloat(i), y: 0)
+        sky.position = CGPoint(x: 0, y: 0)
+
+        sky.zPosition = 0
+        sky.physicsBody = SKPhysicsBody(rectangleOf: sky.size)
+        sky.physicsBody!.affectedByGravity = false
+        sky.physicsBody!.allowsRotation = false
+        sky.physicsBody!.linearDamping = 0
+        sky.physicsBody!.friction = 0
+        sky.physicsBody!.velocity.dx = CGFloat(-catSpeed / 8)
+        sky.physicsBody!.categoryBitMask = 0
+        sky.physicsBody!.collisionBitMask = 0
+        
+        fixed.addChild(sky)
+        
         for i in 0...2 {
             // Setup the position, zPosition, size, etc...
             let rink = backgroundPieces2[i]
@@ -852,7 +881,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let backdrop = backgroundPieces3[i]
             
             backdrop.name = "backdrop"
-            backdrop.size = CGSize (width: 828, height: 900)
+            backdrop.size = CGSize (width: 720, height: 700)
             
             backdrop.anchorPoint = CGPoint(x: 0.5, y:0.5)
             backdrop.position = CGPoint(x: -500 + CGFloat(i) * backdrop.size.width - 5 * CGFloat(i), y: -100)
@@ -869,23 +898,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             screen.addChild(backdrop)
             
             
-            let sky = backgroundPieces[i]
-            
-            sky.name = "Rink"
-            sky.size = CGSize (width: 828, height: 900)
-            sky.anchorPoint = CGPoint(x: 0.5, y:0.5)
-            sky.position = CGPoint(x: -500 + CGFloat(i) * sky.size.width - 20 * CGFloat(i), y: 0)
-            sky.zPosition = 0
-            sky.physicsBody = SKPhysicsBody(rectangleOf: sky.size)
-            sky.physicsBody!.affectedByGravity = false
-            sky.physicsBody!.allowsRotation = false
-            sky.physicsBody!.linearDamping = 0
-            sky.physicsBody!.friction = 0
-            sky.physicsBody!.velocity.dx = CGFloat(-catSpeed / 8)
-            sky.physicsBody!.categoryBitMask = 0
-            sky.physicsBody!.collisionBitMask = 0
-            
-            fixed.addChild(sky)
+
             
             
             
@@ -969,16 +982,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         trampoline.zPosition = 5
         trampoline.name = "trampoline"
         trampoline.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "trampoline0001"), size: trampoline.size)
-
+        
         trampoline.physicsBody!.contactTestBitMask = SkaterCategory
         trampoline.physicsBody!.categoryBitMask = 0
         trampoline.physicsBody!.collisionBitMask = 0
         trampoline.physicsBody!.affectedByGravity = false
         trampoline.physicsBody!.velocity.dx = CGFloat(-catSpeed / speedFactor)
         screen.addChild(trampoline)
-
+        
     }
-
+    
     
     func createCoins() {
         //create coins
@@ -1065,16 +1078,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return theFormation
     }
     
-
+    
     
     func setPlatforms(position : CGPoint) {
         var arr : [SKSpriteNode] = []
-
+        
         createPlatforms(num: 5, inArray: &arr)
         let platFormation = createPlatFormation(useArray: arr, name: "form", pos: position)
         platFormationArray.append(platFormation)
         screen.addChild((platFormationArray.last?.form)!)
-
+        
     }
     
     func addInput(withInt: Int) {
@@ -1135,9 +1148,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 case (_,_,3) :
                     switch jumpNum {
                     case 1:
-                    beginJump(withType: .Salchow, withTakeoff: .salTakeoff)
+                        beginJump(withType: .Salchow, withTakeoff: .salTakeoff)
                     case 2:
-                    beginJump(withType: .Loop, withTakeoff: .loopTakeoff)
+                        beginJump(withType: .Loop, withTakeoff: .loopTakeoff)
                     case 3:
                         beginJump(withType: .Flip, withTakeoff: .flipTakeoff)
                         
@@ -1146,8 +1159,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         
                     case 5:
                         beginJump(withType: .Axel, withTakeoff: .axelTakeoff)
-
-
+                        
+                        
                     default:
                         beginJump(withType: .Toe, withTakeoff: .toeTakeoff)
                     }
@@ -1175,45 +1188,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 return
                 
             }
-                switch lastThree {
-                case (_,_,3) :
-                    //if skater didn't fall and hasn't done a full 3 jump combo, can start new jump
-                    if !currentElement.fall && thePlayer.sprite.action(forKey: "fall") == nil {
-                        beginComboJump(withType: Tech.Toe)
+            switch lastThree {
+            case (_,_,3) :
+                //if skater didn't fall and hasn't done a full 3 jump combo, can start new jump
+                if !currentElement.fall && thePlayer.sprite.action(forKey: "fall") == nil {
+                    beginComboJump(withType: Tech.Toe)
+                }
+            case (_,_,4) :
+                thePlayer.sprite.removeAction(forKey: "land")
+                thePlayer.sprite.removeAction(forKey: "comboJump")
+                updateScore()
+                
+                beginSpin()
+                
+            case (_,_,2) :
+                thePlayer.sprite.removeAction(forKey: "land")
+                thePlayer.sprite.removeAction(forKey: "comboJump")
+                beginSpiral()
+                
+            default:
+                let runBlock = SKAction.run {
+                    [unowned self] in
+                    if self.held && !self.currentElement.fall {
+                        self.beginComboJump(withType: Tech.Toe)
                     }
-                case (_,_,4) :
-                    thePlayer.sprite.removeAction(forKey: "land")
-                    thePlayer.sprite.removeAction(forKey: "comboJump")
-                    updateScore()
-
-                    beginSpin()
-                    
-                case (_,_,2) :
-                    thePlayer.sprite.removeAction(forKey: "land")
-                    thePlayer.sprite.removeAction(forKey: "comboJump")
-                    beginSpiral()
-                    
-                default:
-                    let runBlock = SKAction.run {
-                        [unowned self] in
-                        if self.held && !self.currentElement.fall {
-                            self.beginComboJump(withType: Tech.Toe)
-                        }
-                    }
-                    thePlayer.sprite.run(SKAction.sequence([SKAction.wait(forDuration: 0.1), runBlock]), withKey: "comboJump")
-
+                }
+                thePlayer.sprite.run(SKAction.sequence([SKAction.wait(forDuration: 0.1), runBlock]), withKey: "comboJump")
+                
             }
             
         default:
             break
-    }
+        }
         
         newInput = false
-
+        
     }
     
     func beginJump(withType: Tech, withTakeoff: Move) {
-
+        
         let theVy = calcVY(forHeight: jumpHeight * max(0.4, (stamina / 60)))
         currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
         jumpCombo = Combo(firstEl: currentElement)
@@ -1222,10 +1235,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func beginComboJump(withType: Tech) {
         let theVy = calcVY(forHeight: jumpHeight / (pow(1.3, Double(jumpCombo.combo.count))) * (stamina / 60))
-            thePlayer.sprite.removeAction(forKey: "land")
-            currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
-            jumpCombo.addMove(withEl: currentElement)
-            jump(with: Move.toeTakeoff, vy: theVy)
+        thePlayer.sprite.removeAction(forKey: "land")
+        currentElement = Element(ofType: withType, withSpeed: catSpeed, bySkater: thePlayer)
+        jumpCombo.addMove(withEl: currentElement)
+        jump(with: Move.toeTakeoff, vy: theVy)
         
     }
     
@@ -1240,28 +1253,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func landJump() {
         thePlayer.sprite.removeAction(forKey: "jump")
-
-//        if held {
-//            self.currentElement.addFall()
-//        }
+        
+        //        if held {
+        //            self.currentElement.addFall()
+        //        }
         
         
         if(Double((arc4random_uniform(101))) / 100 > thePlayer.control + stamina / 60) {
             self.currentElement.addFall()
-
+            
         }
         let land = SKAction.run {
             [unowned self] in
             self.thePlayer.sprite.physicsBody?.velocity.dy = 0
-
+            
             self.currentMotion = Motion.Landing
-
+            
             self.goodMove = MoveQuality.notBegun
             self.timingBar.color = UIColor (red:1.0, green:1.0, blue:1.0, alpha:1.0)
             
             if self.currentElement.fall {
                 self.makeFall()
-               // self.speedChange = self.minSpeed
+                // self.speedChange = self.minSpeed
                 //self.thePlayer.sprite.run(self.thePlayer.fall, withKey: "fall")
                 
             } else {
@@ -1276,12 +1289,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let waitLand = SKAction.wait(forDuration: thePlayer.landing.duration / 2)
         self.jumpCancel = false
-
+        
         let finish = SKAction.run {
             [unowned self] in
             //finish jump combo
             self.comboDone = true
-            
             self.thePlayer.sprite.removeAction(forKey:  "timeAction")
             self.actionTimer = 0
             self.invincible = false
@@ -1312,7 +1324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             [unowned self] in
             self.allOff = false
         }
-
+        
         let time : Double = 0
         
         
@@ -1320,9 +1332,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             [unowned self]  in self.currentMotion = Motion.Transition
             self.thePlayer.sprite.physicsBody?.affectedByGravity = false
             self.thePlayer.sprite.physicsBody!.velocity.dy /= 2
-
+            
             self.allOff = true
-
+            
         }
         
         let postTakeoff = SKAction.run(
@@ -1331,7 +1343,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //self.thePlayer.sprite.physicsBody?.affectedByGravity = true
             self.thePlayer.sprite.physicsBody?.affectedByGravity = true
             self.currentMotion = Motion.Midair
-
+            
             self.thePlayer.sprite.physicsBody!.velocity.dy = vy
             
             
@@ -1345,7 +1357,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.thePlayer.sprite.run(SKAction.repeatForever(timeAction), withKey: "timeAction")
             
             //self.thePlayer.sprite.run(SKAction.sequence([SKAction.wait(forDuration: 0.1),setMidair]))
-
+            
             }
         )
         
@@ -1383,35 +1395,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //turnOff contact for platforms momentarily, allowing player to take off without touching platform
         let waitBackOn = SKAction.sequence([SKAction.wait(forDuration: 0.01), backOn])
         let postTakeoffToOn = SKAction.group([postTakeoff, waitBackOn])
-
+        
         thePlayer.sprite.run(SKAction.sequence([trans, takeoff, postTakeoffToOn, rotateMidair]), withKey: "jump")
         
         
     }
     
     func rotateJump() {
-//        let postRotate = SKAction.run {
-//            [unowned self] in
-//            self.thePlayer.sprite.physicsBody!.velocity.dy += 100
-//            if self.currentElement.rotations < 4 {
-//                self.currentElement.addRotation()
-//                let turnOn = SKAction.fadeAlpha(to: 1, duration: 0)
-//                let turnOff = SKAction.fadeAlpha(to: 0, duration: 0)
-//                let success = SKAction(named: "Success", duration: 0.2)!
-//                let successSeq = SKAction.sequence([turnOn, success, turnOff])
-//                self.effect.run(successSeq, withKey: "rotate")
-//            }
-//
-//        }
-//
-//        if goodMove == MoveQuality.bad {
-//            currentElement.addFall()
-//        }
-//
-//        let waitRotate = SKAction.sequence([thePlayer.rotate, postRotate])
-//        thePlayer.sprite.run(SKAction.sequence([ thePlayer.jumpTrans.reversed(), SKAction.repeat(waitRotate, count: 4 - currentElement.rotations)]), withKey: "rotate")
+        //        let postRotate = SKAction.run {
+        //            [unowned self] in
+        //            self.thePlayer.sprite.physicsBody!.velocity.dy += 100
+        //            if self.currentElement.rotations < 4 {
+        //                self.currentElement.addRotation()
+        //                let turnOn = SKAction.fadeAlpha(to: 1, duration: 0)
+        //                let turnOff = SKAction.fadeAlpha(to: 0, duration: 0)
+        //                let success = SKAction(named: "Success", duration: 0.2)!
+        //                let successSeq = SKAction.sequence([turnOn, success, turnOff])
+        //                self.effect.run(successSeq, withKey: "rotate")
+        //            }
+        //
+        //        }
+        //
+        //        if goodMove == MoveQuality.bad {
+        //            currentElement.addFall()
+        //        }
+        //
+        //        let waitRotate = SKAction.sequence([thePlayer.rotate, postRotate])
+        //        thePlayer.sprite.run(SKAction.sequence([ thePlayer.jumpTrans.reversed(), SKAction.repeat(waitRotate, count: 4 - currentElement.rotations)]), withKey: "rotate")
         if !held && !jumpCancel {
-
+            
             let postRotate = SKAction.run {
                 [unowned self] in
                 self.thePlayer.sprite.physicsBody!.velocity.dy += 100
@@ -1423,32 +1435,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     let successSeq = SKAction.sequence([turnOn, success, turnOff])
                     self.effect.run(successSeq, withKey: "rotate")
                 }
-
+                
             }
-
-//            if goodMove == MoveQuality.bad {
-//                currentElement.addFall()
-//            }
-
+            
+            //            if goodMove == MoveQuality.bad {
+            //                currentElement.addFall()
+            //            }
+            
             let waitRotate = SKAction.sequence([thePlayer.rotate, postRotate])
             thePlayer.sprite.run(SKAction.sequence([ thePlayer.jumpTrans.reversed(), SKAction.repeat(waitRotate, count: 4 - currentElement.rotations)]), withKey: "rotate")
-
-        } else {
+            
+        } else if held {
             jumpCancel = true
-
+            
             if thePlayer.sprite.action(forKey: "rotate") == nil {
                 return
             }
-
+            
             thePlayer.sprite.removeAction(forKey: "rotate")
             effect.removeAction(forKey: "rotate")
-
+            //   self.thePlayer.sprite.physicsBody!.velocity.dy -= 300
+            
             thePlayer.sprite.run(thePlayer.jumpTrans)
-
+            
         }
     }
     
     func beginSpiral() {
+        updateScore()
         currentElement = Element(ofType: Tech.Spiral, withSpeed: catSpeed, bySkater: thePlayer)
         currentMotion = Motion.Spiral
         spiral()
@@ -1479,7 +1493,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.updateScore()
             self.currentMotion = Motion.Skating
             
-           self.catSpeed = self.speedChange
+            self.catSpeed = self.speedChange
             self.thePlayer.sprite.run(SKAction.sequence([SKAction.wait(forDuration: 0.9), endInvincible]))
             
         }
@@ -1495,7 +1509,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             [unowned self] in
             let speed = self.stamina * 5 * self.thePlayer.spiralPower
             self.speedChange = self.catSpeed
-        self.catSpeed += speed
+            self.catSpeed += speed
         }
         let removeTime = SKAction.run {
             [unowned self] in
@@ -1514,7 +1528,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let endlessGroup = SKAction.group([endlessRemove, endlessAdd, endlessSpiral])
         
         
-
+        
         thePlayer.sprite.run(SKAction.sequence([thePlayer.spiralEntrance, addSpeed, makeInvincible, endlessGroup]), withKey: "spiral")
         
         if !held {
@@ -1533,7 +1547,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spin() {
         let spinTime : Double = 3 * thePlayer.spinPower
-
+        
         let endSpin = SKAction.run(
         {
             [unowned self]  in
@@ -1547,8 +1561,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.thePlayer.sprite.run(self.thePlayer.spin)
             self.currentMotion = Motion.Skating
             self.catSpeed = min(self.speedChange, self.thePlayer.maxSpeed)
-
+            
             self.actionTimer = 0
+            self.invincible = false
             }
         )
         
@@ -1641,35 +1656,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateBanana() {
         for banana in bananaArray {
-        if banana.collected {
-            banana.collected = false
-        }
-        banana.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
-        
-        if banana.position.x + (banana.size.width / 2) < screen.position.x - (screen.size.width / 2) || banana.parent == nil {
-            banana.removeFromParent()
+            if banana.collected {
+                banana.collected = false
+            }
+            banana.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
             
-            let rand = CGFloat(arc4random_uniform(101)) / 100
-            banana.position.y = 100 + 400 * rand
-            
-            let randx = CGFloat(arc4random_uniform(1000))
-
-            banana.position.x = 900 + randx
-            banana.physicsBody?.affectedByGravity = true
-            banana.alpha = 1
-            screen.addChild(banana)
-            
-        }
+            if banana.position.x + (banana.size.width / 2) < screen.position.x - (screen.size.width / 2) || banana.parent == nil {
+                banana.removeFromParent()
+                
+                let rand = CGFloat(arc4random_uniform(101)) / 100
+                banana.position.y = 100 + 400 * rand
+                
+                let randx = CGFloat(arc4random_uniform(1000))
+                
+                banana.position.x = 900 + randx
+                banana.physicsBody?.affectedByGravity = true
+                banana.alpha = 1
+                screen.addChild(banana)
+                
+            }
         }
     }
     
     func updateCoins() {
         for coin in coinArray {
             coin.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx
-
+            
             if coin.collected && coin.parent == nil {
                 coin.collected = false
-
+                
             }
             
         }
@@ -1686,7 +1701,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let number = arc4random_uniform(4)
             
             coinFormation.setFormation(withForm: Int(number))
-
+            
             screen.addChild(coinFormation.form)
             
         }
@@ -1700,13 +1715,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let transformed = backgroundPieces.map { $0.frame.maxX }
                 let maxX = transformed.max()
                 background.position.x = maxX! + background.size.width / 2 - 30
-
+                
             }
         }
         
         
-    for background in backgroundPieces2 {
-        
+        for background in backgroundPieces2 {
+            
             if background.frame.maxX < screen.frame.minX {
                 let transformed = backgroundPieces2.map { $0.frame.maxX }
                 let maxX = transformed.max()
@@ -1726,65 +1741,101 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func setInitBackground() {
+        let backgroundArr = backgroundDict[backgroundNum]
+        imageName = backgroundArr![0]
+        foregroundName = backgroundArr![1]
+        foreground2Name = backgroundArr![2]
+        let skyShader = SKShader(fileNamed: "sky.fsh")
+        
+        let fov : Float = 45;
+        let near_clip : Float = 0.1;
+        let far_clip : Float = 1000;
+        let aspect : Float = Float(self.backgroundPieces[0].size.width / self.backgroundPieces[0].size.height);
+        let s = tan(fov / 2);
+        print(aspect);
+        let proj : matrix_float4x4 = matrix_float4x4(vector_float4(1 / (aspect * s), 0,0,0), vector_float4(0, 1 / s, 0,0), vector_float4(0,0,far_clip / (far_clip - near_clip),1), vector_float4(0,0,(-far_clip * near_clip) / (far_clip - near_clip),0)).inverse;
+        
+        
+        for background in self.backgroundPieces {
+            background.texture = SKTexture(imageNamed: self.imageName!)
+            background.shader = skyShader
+            background.shader?.addUniform(SKUniform(name: "u_Dimensions", vectorFloat2: vector_float2([Float(background.size.width), Float(background.size.height)])))
+            background.shader?.addUniform(SKUniform(name: "u_ViewProjInv", matrixFloat4x4: proj))
+
+            
+        }
+        for background in self.backgroundPieces2 {
+            background.texture = SKTexture(imageNamed: self.foregroundName!)
+        }
+        for background in self.backgroundPieces3 {
+            background.texture = SKTexture(imageNamed: self.foreground2Name!)
+        }
+    }
+    
     func updateBackground() {
         let fadeIn = SKAction.fadeAlpha(to: 1, duration: 5)
-
         let fadeOut = SKAction.fadeAlpha(to: 0, duration: 4)
-        
         let backgroundTrans = fixed.childNode(withName: "trans")
-
+        
         
         
         if imageName == "background7" {
             backgroundTrans?.zPosition = 4
         }
-        switch backgroundNum {
+        
+        let backgroundArr = backgroundDict[backgroundNum]
+        imageName = backgroundArr![0]
+        foregroundName = backgroundArr![1]
+        foreground2Name = backgroundArr![2]
 
+        /*switch backgroundNum {
+            
         case 1:
             backgroundTrans?.zPosition = 4
             imageName = "background7"
             foregroundName = "foregroundtrans"
             foreground2Name = "foregroundtrans"
-
+            
         case 2:
-
+            
             imageName = "sky1"
             foregroundName = "foreground1"
             foreground2Name = "foreground3"
-
+            
             
         case 3:
-
+            
             imageName = "background10"
             foregroundName = "foreground1"
             foreground2Name = "foreground3"
-
-
+            
+            
         case 4:
-
+            
             imageName = "background11"
             foregroundName = "foreground1"
             foreground2Name = "foreground3"
-
+            
             
         default:
             backgroundTrans?.run(fadeIn)
-
-
-        }
+            
+            
+        }*/
         
         if imageName == nil || foregroundName == nil || foreground2Name == nil {
             return
         }
-
+        
         let change = SKAction.run {
-        [unowned self] in
-        for background in self.backgroundPieces {
-          background.texture = SKTexture(imageNamed: self.imageName!)
+            [unowned self] in
+            for background in self.backgroundPieces {
+                background.texture = SKTexture(imageNamed: self.imageName!)
             }
-        for background in self.backgroundPieces2 {
-            background.texture = SKTexture(imageNamed: self.foregroundName!)
-        }
+            for background in self.backgroundPieces2 {
+                background.texture = SKTexture(imageNamed: self.foregroundName!)
+            }
             
             for background in self.backgroundPieces3 {
                 background.texture = SKTexture(imageNamed: self.foreground2Name!)
@@ -1814,20 +1865,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             trampoline.physicsBody!.collisionBitMask = 0
             trampoline.physicsBody!.contactTestBitMask = SkaterCategory
             
-
+            
         } else {
             trampoline.physicsBody!.categoryBitMask = 0
             trampoline.physicsBody!.collisionBitMask = 0
             trampoline.physicsBody!.contactTestBitMask = 0
-
+            
             //trampoline.alpha = 0.4
-
+            
         }
         
         if trampoline.position.x + (trampoline.size.width / 2) < screen.position.x - (screen.size.width / 2) {
             trampoline.removeFromParent()
             let xNumber = 2000 + arc4random_uniform(2000)
-
+            
             trampoline.position.x = CGFloat(xNumber)
             let number = arc4random_uniform(200)
             trampoline.position.y = CGFloat(number)
@@ -1854,18 +1905,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let playerFoot = playerPos.y - thePlayer.sprite.size.height / CGFloat(thePlayer.footDiv)
             let platRightEdge = platformPos.x + platform.size.width / 2
             let playerXEdge = playerPos.x - thePlayer.sprite.size.width / 8
-
+            
             //set collisions and contacts only if the player is moving down and the platform is at player's foot area
             if platUpperEdge < playerFoot && platRightEdge > playerXEdge && (thePlayer.sprite.physicsBody?.velocity.dy)! <= CGFloat(0) && !allOff {
                 platform.physicsBody!.categoryBitMask = SkaterCategory
                 platform.physicsBody!.collisionBitMask = 0
                 platform.physicsBody!.contactTestBitMask = SkaterCategory
- 
-               //platform.color = UIColor(red: 0, green: 1, blue: 0.2, alpha: 1)
+                
+                //platform.color = UIColor(red: 0, green: 1, blue: 0.2, alpha: 1)
                 
                 
             } else {
-               
+                
                 platform.physicsBody!.categoryBitMask = 0
                 platform.physicsBody!.collisionBitMask = 0
                 platform.physicsBody!.contactTestBitMask = 0
@@ -1905,7 +1956,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for item in itemArray {
             
             item.physicsBody?.velocity.dx = coinFormation.form.physicsBody!.velocity.dx + CGFloat(item.itemSpeed)
-
+            
             if item.collected && item.parent == nil {
                 item.collected = false
                 
@@ -1939,7 +1990,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let number = arc4random_uniform(2) + 1
             let item = itemArray[Int(number)]
             let rand2 = CGFloat(arc4random_uniform(101)) / 100
-
+            
             item.position.x = 1300
             item.position.y = -100 + 400 * rand2
             
@@ -1964,7 +2015,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let strike2 = pauseGoalLabelArray[count].childNode(withName: "strikethrough") as! SKSpriteNode
                 strike2.color = doneColor
             }
-
+            
             count += 1
         }
     }
@@ -1975,10 +2026,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if currentElement.type != Tech.None {
             scoresheet.append(currentElement)
         }
-     /*
-        if stamina > 0 {
-        updateMomentum()
-        }*/
+        /*
+         if stamina > 0 {
+         updateMomentum()
+         }*/
         
         if lives > 0 {
             updateMomentum()
@@ -1990,12 +2041,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         thePlayer.sprite.removeAction(forKey: "jump")
         thePlayer.sprite.removeAction(forKey: "rotate")
         thePlayer.sprite.removeAction(forKey: "comboJump")
-
+        
         thePlayer.sprite.removeAction(forKey: "spin")
         thePlayer.sprite.removeAction(forKey: "land")
         thePlayer.sprite.removeAction(forKey: "spiral")
-
-
+        
+        
     }
     
     func endCollisions() {
@@ -2003,14 +2054,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             item.physicsBody?.contactTestBitMask = 0
             item.physicsBody?.categoryBitMask = 0
             item.physicsBody?.collisionBitMask = 0
-
+            
         }
         
         for coin in coinArray {
             coin.physicsBody?.contactTestBitMask = 0
             coin.physicsBody?.categoryBitMask = 0
             coin.physicsBody?.collisionBitMask = 0
-
+            
         }
         
         for formation in platFormationArray {
@@ -2018,7 +2069,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 platform.physicsBody?.contactTestBitMask = 0
                 platform.physicsBody?.categoryBitMask = 0
                 platform.physicsBody?.collisionBitMask = 0
-
+                
             }
             
         }
@@ -2032,19 +2083,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let platHeight = platformPos.y + plat.size.height / 2 + thePlayer.sprite.size.height / CGFloat(thePlayer.footDiv)
         
-        stopJerk = true
         thePlayer.sprite.removeFromParent()
         thePlayer.sprite.position.y = platHeight
         screen.addChild(thePlayer.sprite)
-        stopJerk = false
-
-
+        
+        
     }
     
     func moveItemAbovePlatform(plat: Collectible, toMove: SKSpriteNode) {
         var platformPos : CGPoint
         platformPos = (plat.parent?.convert(plat.position, to: screen))!
-
+        
         
         let platHeight = platformPos.y + plat.size.height / 2 + toMove.size.height / 2
         
@@ -2062,7 +2111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.catSpeed = minSpeed
         let increaseSpeed = SKAction.run {
             self.catSpeed += (temp - self.catSpeed) / 6
-
+            
         }
         
         let accelerate = SKAction.repeat(SKAction.sequence([increaseSpeed, SKAction.wait(forDuration: 0.5)]), count: 6)
@@ -2079,8 +2128,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.thePlayer.sprite.removeAction(forKey:  "timeAction")
         self.actionTimer = 0
-
-
+        
+        
         let postFall = SKAction.run{
             [unowned self] in
             
@@ -2102,69 +2151,69 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
-            if (nodeA.name == "player" && nodeB.name == "ground") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "ground") {
-                if currentMotion == Motion.Midair {
-
-                    //if the player is already landing, don't land again
-                    landJump()
-                    thePlayer.sprite.physicsBody?.velocity.dy = 0
-                    // thePlayer.sprite.physicsBody?.affectedByGravity = false
-                    grounded = true
-                }
-            }
-            
-            if (nodeA.name == "player" && nodeB.name == "platform") {
-                let platform = nodeB as! Collectible
+        if (nodeA.name == "player" && nodeB.name == "ground") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "ground") {
+            if currentMotion == Motion.Midair {
                 
-                if currentMotion == Motion.Midair {
-
+                //if the player is already landing, don't land again
+                landJump()
+                thePlayer.sprite.physicsBody?.velocity.dy = 0
+                // thePlayer.sprite.physicsBody?.affectedByGravity = false
+                grounded = true
+            }
+        }
+        
+        if (nodeA.name == "player" && nodeB.name == "platform") {
+            let platform = nodeB as! Collectible
+            
+            if currentMotion == Motion.Midair {
+                
                 currentMotion = Motion.Landing
                 moveAbovePlatform(plat: platform)
-                   
+                
                 landJump()
-
+                
                 platform.collected = true
                 
-                } else {
-                    moveAbovePlatform(plat: platform)
-
-                    thePlayer.sprite.physicsBody?.velocity.dy = 0
-                    //currentMotion = Motion.Skating
-
-
-                }
+            } else {
+                moveAbovePlatform(plat: platform)
+                
+                thePlayer.sprite.physicsBody?.velocity.dy = 0
+                //currentMotion = Motion.Skating
+                
                 
             }
             
-            if (nodeB.name == "player" && nodeA.name == "platform") {
-                let platform = nodeA as! Collectible
+        }
+        
+        if (nodeB.name == "player" && nodeA.name == "platform") {
+            let platform = nodeA as! Collectible
+            
+            if currentMotion == Motion.Midair {
                 
-                if currentMotion == Motion.Midair {
-
                 currentMotion = Motion.Landing
-                    moveAbovePlatform(plat: platform)
-
+                moveAbovePlatform(plat: platform)
+                
                 thePlayer.sprite.physicsBody?.velocity.dy = 0
-
+                
                 landJump()
-
+                
                 platform.collected = true
-                } else {
-                    moveAbovePlatform(plat: platform)
-
-                    thePlayer.sprite.physicsBody?.velocity.dy = 0
-                    //currentMotion = Motion.Skating
-
-                }
+            } else {
+                moveAbovePlatform(plat: platform)
+                
+                thePlayer.sprite.physicsBody?.velocity.dy = 0
+                //currentMotion = Motion.Skating
                 
             }
+            
+        }
         
         
         
         
         if (nodeA.name == "banana" && nodeB.name == "ground") {
             let banana = nodeA as! Collectible
-
+            
             banana.physicsBody?.velocity.dy = 0
             banana.physicsBody?.affectedByGravity = false
             
@@ -2172,13 +2221,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let move = SKAction.moveTo(y: groundHeight, duration: 0)
             banana.run(move)
-
+            
             
         }
         
         if (nodeB.name == "banana" && nodeA.name == "ground") {
             let banana = nodeB as! Collectible
-
+            
             banana.physicsBody?.velocity.dy = 0
             banana.physicsBody?.affectedByGravity = false
             
@@ -2186,18 +2235,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let move = SKAction.moveTo(y: groundHeight, duration: 0)
             banana.run(move)
-
+            
         }
         
         if (nodeA.name == "banana" && nodeB.name == "platform") {
             let platform = nodeB as! Collectible
             let banana = nodeA as! Collectible
-
+            
             banana.physicsBody?.velocity.dy = 0
             banana.physicsBody?.affectedByGravity = false
             
             if (banana.physicsBody?.velocity.dy)! < CGFloat(0) {
-            moveItemAbovePlatform(plat: platform, toMove: banana)
+                moveItemAbovePlatform(plat: platform, toMove: banana)
             }
             
         }
@@ -2205,7 +2254,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (nodeB.name == "banana" && nodeA.name == "platform") {
             let platform = nodeA as! Collectible
             let banana = nodeB as! Collectible
-
+            
             banana.physicsBody?.velocity.dy = 0
             banana.physicsBody?.affectedByGravity = false
             if (banana.physicsBody?.velocity.dy)! < CGFloat(0) {
@@ -2231,7 +2280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 smashBanana(forBanana: theBanana)
             }
-        
+            
             
         } else if (nodeB.name == "player" && nodeA.name == "banana") {
             let theBanana = contact.bodyA.node as! Collectible
@@ -2239,11 +2288,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if theBanana.parent == nil {return}
             
             if thePlayer.sprite.action(forKey: "fall") == nil && currentMotion != Motion.Midair && !invincible {
-
-                consumeBanana(forBanana: theBanana)
-
                 
-
+                consumeBanana(forBanana: theBanana)
+                
+                
+                
                 
             } else {
                 if thePlayer.sprite.action(forKey: "fall") != nil {
@@ -2252,7 +2301,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 smashBanana(forBanana: theBanana)
             }
             
-        
+            
         }
         
         
@@ -2332,24 +2381,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if theKoi.parent == nil {return}
             if !theKoi.collected && currentMotion != Motion.Spiral {
                 consumeKoi(koi: theKoi)
-                    
-                }
                 
             }
+            
+        }
         
         
         if (nodeA.name == "player" && nodeB.name == "trampoline") {
             let trampoline = nodeB as! Collectible
             thePlayer.sprite.physicsBody?.velocity.dy = 500
             trampoline.run(SKAction(named: "TrampolineBounce")!)
-
+            
             
         } else if (nodeB.name == "player" && nodeA.name == "trampoline") {
             let trampoline = nodeA as! Collectible
             thePlayer.sprite.physicsBody?.velocity.dy = 500
             trampoline.run(SKAction(named: "TrampolineBounce")!)
-
-
+            
+            
             
         }
     }
@@ -2405,7 +2454,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         burstItem(item: koi)
         invincible = true
-
+        
         catSpeed += 200
         if currentElement.type == Tech.None {
             beginJump(withType: .Loop, withTakeoff: .loopTakeoff)
@@ -2464,7 +2513,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             invincibleEffect.alpha = 1
         } else {
             invincibleEffect.alpha = 0
-
+            
         }
     }
     
@@ -2474,7 +2523,57 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func displayGoals() {
+        restartLabel.removeFromParent()
+        quitLabel.removeFromParent()
+        resumeLabel.removeFromParent()
+        
+        
+        
+        fixed.addChild(pausebox)
+        
+    }
+    
+    
+    func displayNewGoals() {
+        displayGoals()
+        
+        var newGoalLabelArray : [SKLabelNode] = []
+        
+        
+        
 
+        for goal in currentGoals.set {
+            let goalLabel = SKLabelNode(fontNamed: "Avenir-Book")
+            goalLabel.text = goal.text
+            goalLabel.fontSize = 45
+            goalLabel.zPosition = 12
+            goalLabel.fontColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1)
+            newGoalLabelArray.append(goalLabel)
+        }
+        
+        
+        var count = 0
+        for label in newGoalLabelArray {
+            //all labels have a strikethrough but with 0 alpha
+            //strikethrough.zPosition =
+            label.position = CGPoint(x: 2000, y: 100 - 100 * count)
+            pausebox.addChild(label)
+            count += 1
+        }
+        
+        for theGoal in pauseGoalLabelArray {
+            theGoal.run(SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.moveTo(x: -2000, duration: 0.5)]))
+        }
+        
+        for theGoal in newGoalLabelArray {
+            theGoal.run(SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.moveTo(x: 0, duration: 0.5)]))
+        }
+        
+    }
+    
+    
+    
     
     @objc func swipedRight() {
         if(!gamePaused) {
@@ -2530,7 +2629,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         screen.run(SKAction.repeatForever(countUpSeq), withKey: "heldTime")
         
         let converted = convert(pos, to: fixed)
-        if pauseButton.contains(converted) {
+        if pauseButton.contains(converted) && !gameOver {
             gamePaused = !gamePaused
             if gamePaused {
                 screen.isPaused = true
@@ -2566,7 +2665,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 pausebox.removeFromParent()
                 screen.isPaused = false
                 gamePaused = !gamePaused
-
+                
             }
         }
         
@@ -2610,10 +2709,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
-    //print(currentMotion)
+        //print(currentMotion)
         //print("1: " + String(Double(platFormation.form.physicsBody!.velocity.dx)))
         //print("2: " + String(Double(platFormation2.form.physicsBody!.velocity.dx)))
-
+        
         if gamePaused {
             screen.isPaused = true
             
@@ -2625,9 +2724,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        if !stopJerk {
+        //        if !stopJerk {
         cam?.position.y = thePlayer.sprite.position.y / 1.5
-        }
+        //        }
         replaceBackground()
         updateCoins()
         updateItems()
@@ -2638,16 +2737,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for formation in platFormationArray {
             updatePlatforms(platForm: formation)
-
+            
         }
-        updateGoalText ()
+        
+        if(!gameOver) {
+        updateGoalText()
+        }
         for el in currentGoals.set {
             el.updateTotal(bananas: bananaSmash, kois: numKois, butterflies: numButterflies, pineapples: numPineapples, coins: coins)
             
         }
-
-
-
+        
+        
+        
     }
     
 }

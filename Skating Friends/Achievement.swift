@@ -61,6 +61,7 @@ class Achievement: NSObject, NSCoding {
         
         goalType = withType
         level = withLevel
+
         runSpecific = isRunSpecific
         itemType = withItem
         savedTotal = forSavedTotal
@@ -241,7 +242,7 @@ class Achievement: NSObject, NSCoding {
             case 4:
                 requirement = 4
             default:
-                break
+                requirement = 4
             }
             
             
@@ -281,6 +282,60 @@ class Achievement: NSObject, NSCoding {
                 break
             }
             
+        case .SpinsTotal :
+            switch level {
+            case 1:
+                requirement = 10
+            case 2:
+                requirement = 20
+            case 3:
+                requirement = 50
+            case 4:
+                requirement = 80
+            case 5:
+                requirement = 120
+            case 6:
+                requirement = 200
+            default:
+                break
+            }
+            
+        case .SpiralsRun :
+            switch level {
+            case 1:
+                requirement = 1
+            case 2:
+                requirement = 2
+            case 3:
+                requirement = 5
+            case 4:
+                requirement = 8
+            case 5:
+                requirement = 12
+            case 6:
+                requirement = 20
+            default:
+                break
+            }
+            
+        case .SpiralsTotal :
+            switch level {
+            case 1:
+                requirement = 10
+            case 2:
+                requirement = 20
+            case 3:
+                requirement = 50
+            case 4:
+                requirement = 80
+            case 5:
+                requirement = 120
+            case 6:
+                requirement = 200
+            default:
+                break
+            }
+            
         case .CoinsRun :
             switch level {
             case 1:
@@ -293,6 +348,8 @@ class Achievement: NSObject, NSCoding {
                 requirement = 1000
             case 5:
                 requirement = 2000
+            case 6:
+                requirement = 3000
             default:
                 break
             }
@@ -385,6 +442,40 @@ class Achievement: NSObject, NSCoding {
             default:
                 break
             }
+        case .TechRun :
+            switch level {
+            case 1:
+                requirement = 10
+            case 2:
+                requirement = 50
+            case 3:
+                requirement = 100
+            case 4:
+                requirement = 200
+            case 5:
+                requirement = 300
+            case 6:
+                requirement = 600
+            default:
+                break
+            }
+        case .TechTotal :
+            switch level {
+            case 1:
+                requirement = 200
+            case 2:
+                requirement = 650
+            case 3:
+                requirement = 1250
+            case 4:
+                requirement = 2500
+            case 5:
+                requirement = 5000
+            case 6:
+                requirement = 10000
+            default:
+                break
+            }
             
             default:
             break
@@ -417,49 +508,49 @@ class Achievement: NSObject, NSCoding {
         switch goalType {
        
         case .DoubleCombo :
-            text = makeComboString(elType: "Double jumps")
+            text = makeComboString(elType: "Double jump(s)")
         case .DoublesRun :
-            text = makeRunString(elType: "Double jumps")
+            text = makeRunString(elType: "Double jump(s)")
         case .DoublesTotal :
-            text = makeTotalString(elType: "Double jumps")
+            text = makeTotalString(elType: "Double jump(s)")
         case .QuadCombo :
-            text = makeComboString(elType: "Quad jumps")
+            text = makeComboString(elType: "Quad jump(s)")
         case .QuadsRun :
-            text = makeRunString(elType: "Quad jumps")
+            text = makeRunString(elType: "Quad jump(s)")
         case .QuadsTotal :
-            text = makeTotalString(elType: "Quad jumps")
+            text = makeTotalString(elType: "Quad jump(s)")
         case .SpinsRun :
-            text = makeRunString(elType: "Spins")
+            text = makeRunString(elType: "Spin(s)")
         case .SpinsTotal :
-            text = makeTotalString(elType: "Spins")
+            text = makeTotalString(elType: "Spin(s)")
         case .SpiralsRun :
-            text = makeRunString(elType: "Spiral Sequences")
+            text = makeRunString(elType: "Spiral Sequence(s)")
         case .SpiralsTotal :
-            text = makeTotalString(elType: "Spiral Sequences")
+            text = makeTotalString(elType: "Spiral Sequence(s)")
         case .TechRun :
             text = String(format: "Score %d technical points in one run", requirement)
         case .TechTotal :
             text = String(format: "Score %d technical points in total", requirement)
         case .TriplesCombo :
-            text = makeComboString(elType: "Triple jumps")
+            text = makeComboString(elType: "Triple jump(s)")
         case .TriplesRun :
-            text = makeRunString(elType: "Triple jumps")
+            text = makeRunString(elType: "Triple jump(s)")
         case .TriplesTotal :
-            text = makeTotalString(elType: "Triple jumps")
+            text = makeTotalString(elType: "Triple jump(s)")
         case .CoinsTotal:
-            text = makeCollectTotalString(itemType: "Coins")
+            text = makeCollectTotalString(itemType: "Coin(s)")
          
         case .CoinsRun:
-            text = makeCollectRunString(itemType: "Coins")
+            text = makeCollectRunString(itemType: "Coin(s)")
             
         case .ItemsTotal:
             switch itemType! {
             case .Koi:
-                text = makeCollectTotalString(itemType: "Kois")
+                text = makeCollectTotalString(itemType: "Koi(s)")
             case .Butterfly:
-                text = makeCollectTotalString(itemType: "Butterflies")
+                text = makeCollectTotalString(itemType: "Butterflie(s)")
             case .Pineapple:
-                text = makeCollectTotalString(itemType: "Pineapples")
+                text = makeCollectTotalString(itemType: "Pineapple(s)")
             default:
                 break
                 
@@ -467,11 +558,11 @@ class Achievement: NSObject, NSCoding {
         case .ItemsRun:
             switch itemType! {
             case .Koi:
-                text = makeCollectRunString(itemType: "Kois")
+                text = makeCollectRunString(itemType: "Koi(s)")
             case .Butterfly:
-                text = makeCollectRunString(itemType: "Butterflies")
+                text = makeCollectRunString(itemType: "Butterflie(s)")
             case .Pineapple:
-                text = makeCollectRunString(itemType: "Pineapples")
+                text = makeCollectRunString(itemType: "Pineapple(s)")
             default:
                 break
                 
@@ -480,7 +571,7 @@ class Achievement: NSObject, NSCoding {
         case .ObstaclesTotal:
             switch itemType! {
             case .Banana:
-                text = String(format: "Smash %d bananas in total. %d to go!", requirement, requirement - currTotal - savedTotal)
+                text = String(format: "Smash %d banana(s) in total. %d to go!", requirement, requirement - currTotal - savedTotal)
             default:
                 break
             }
@@ -489,7 +580,7 @@ class Achievement: NSObject, NSCoding {
         case .ObstaclesRun:
             switch itemType! {
             case .Banana:
-                text = String(format: "Smash %d bananas in one run.", requirement)
+                text = String(format: "Smash %d banana(s) in one run.", requirement)
             default:
                 break
             }
@@ -500,7 +591,7 @@ class Achievement: NSObject, NSCoding {
         }
     }
     
-    func updateTotal(fromScoresheet: [Element]) {
+    func updateTotal(fromScoresheet: [Element], game: GameScene) {
         
         switch goalType {
             
@@ -517,13 +608,14 @@ class Achievement: NSObject, NSCoding {
         case .SpiralsRun, .SpiralsTotal :
             currTotal += checkLastSpiral(theScoresheet: fromScoresheet)
         case .TechRun :
-            text = String(format: "Score %d technical points in one run", requirement)
+            currTotal += Int(game.score)
         case .TechTotal :
-            text = String(format: "Score %d technical points in one total", requirement)
+            currTotal += Int(game.score)
         case .TriplesCombo :
             currTotal = checkLastJump(theScoresheet: fromScoresheet, numRots: 3)
         case .TriplesRun, .TriplesTotal :
             currTotal += checkLastJump(theScoresheet: fromScoresheet, numRots: 3)
+        
             
         default :
             break
@@ -632,5 +724,6 @@ class Achievement: NSObject, NSCoding {
         
         return 0
     }
+    
     
     }

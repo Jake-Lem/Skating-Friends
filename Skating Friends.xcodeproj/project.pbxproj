@@ -35,6 +35,7 @@
 		23A23E4A20DC3C9C0067D369 /* RecordScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A23E4920DC3C9C0067D369 /* RecordScene.swift */; };
 		23A23E4C20DC3CB40067D369 /* RecordScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 23A23E4B20DC3CB40067D369 /* RecordScene.sks */; };
 		23A23E4E20DC3EC50067D369 /* ScrollingSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A23E4D20DC3EC50067D369 /* ScrollingSprite.swift */; };
+		23AA09F821D9A42700CC19BA /* sky.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 23AA09F721D9A42600CC19BA /* sky.fsh */; };
 		23B54F6920EAC31A007BB200 /* Formation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B54F6820EAC31A007BB200 /* Formation.swift */; };
 		23B9A1D620D0C1D7009B954C /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9A1D520D0C1D7009B954C /* Element.swift */; };
 		23D6CF6320D20F5A0009F76C /* CharacterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D6CF6220D20F5A0009F76C /* CharacterScene.swift */; };
@@ -94,6 +95,7 @@
 		23A23E4920DC3C9C0067D369 /* RecordScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordScene.swift; sourceTree = "<group>"; };
 		23A23E4B20DC3CB40067D369 /* RecordScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RecordScene.sks; sourceTree = "<group>"; };
 		23A23E4D20DC3EC50067D369 /* ScrollingSprite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingSprite.swift; sourceTree = "<group>"; };
+		23AA09F721D9A42600CC19BA /* sky.fsh */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; path = sky.fsh; sourceTree = "<group>"; };
 		23B54F6820EAC31A007BB200 /* Formation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formation.swift; sourceTree = "<group>"; };
 		23B9A1D520D0C1D7009B954C /* Element.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Element.swift; sourceTree = "<group>"; };
 		23D6CF6220D20F5A0009F76C /* CharacterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterScene.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				235A12F120D1971800F3F10D /* StartScene.swift */,
 				23D6CF6220D20F5A0009F76C /* CharacterScene.swift */,
 				233FDB1820CD696100C469F7 /* GameScene.swift */,
+				23AA09F721D9A42600CC19BA /* sky.fsh */,
 				2376E8AB213063C7006D061D /* Achievement.swift */,
 				2376E8AD213066C9006D061D /* AchievementSet.swift */,
 				2331D0FE20E9EEA600B513EB /* Collectible.swift */,
@@ -322,6 +325,7 @@
 				235A12F020D1970900F3F10D /* StartScene.sks in Resources */,
 				233FDB2320CD696100C469F7 /* LaunchScreen.storyboard in Resources */,
 				239F263820D4767100B4E012 /* PostGameScene.sks in Resources */,
+				23AA09F821D9A42700CC19BA /* sky.fsh in Resources */,
 				23A23E4C20DC3CB40067D369 /* RecordScene.sks in Resources */,
 				233FDB1720CD696100C469F7 /* Actions.sks in Resources */,
 			);

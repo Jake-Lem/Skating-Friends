@@ -104,6 +104,7 @@ class RecordScene: SKScene {
 
         let PlayerLevel = defaults.integer(forKey: "PlayerLevel")
         levelLabel.text = String(PlayerLevel)
+        levelLabel.zPosition = 2
         levelLabel.position = CGPoint(x: 0, y: 600)
         fullScreen?.addChild(levelLabel)
 

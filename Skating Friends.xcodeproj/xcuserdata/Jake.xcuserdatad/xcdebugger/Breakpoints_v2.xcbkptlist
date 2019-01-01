@@ -24,11 +24,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Skating Friends/GameScene.swift"
-            timestampString = "567785145.311025"
+            timestampString = "567995092.907313"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2526"
-            endingLineNumber = "2526"
+            startingLineNumber = "2621"
+            endingLineNumber = "2621"
             landmarkName = "touchDown(atPoint:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -40,11 +40,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Skating Friends/GameScene.swift"
-            timestampString = "567785145.3110909"
+            timestampString = "567995092.907645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2528"
-            endingLineNumber = "2528"
+            startingLineNumber = "2623"
+            endingLineNumber = "2623"
             landmarkName = "touchDown(atPoint:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -56,11 +56,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Skating Friends/GameScene.swift"
-            timestampString = "567785145.311141"
+            timestampString = "567995092.90774"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1350"
-            endingLineNumber = "1350"
+            startingLineNumber = "1358"
+            endingLineNumber = "1358"
             landmarkName = "jump(with:vy:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -72,7 +72,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Skating Friends/PostGameScene.swift"
-            timestampString = "567698546.310968"
+            timestampString = "567881008.844072"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
@@ -88,11 +88,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Skating Friends/GameScene.swift"
-            timestampString = "567785145.311203"
+            timestampString = "567995092.907846"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2648"
-            endingLineNumber = "2648"
+            startingLineNumber = "2746"
+            endingLineNumber = "2746"
             landmarkName = "update(_:)"
             landmarkType = "7">
          </BreakpointContent>

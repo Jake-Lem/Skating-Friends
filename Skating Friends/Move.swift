@@ -74,4 +74,6 @@ enum Goal : String {
     case SpinsTotal
     case SpiralsRun
     case SpiralsTotal
+    
+    case Blank
 }
